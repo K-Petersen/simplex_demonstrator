@@ -1,0 +1,76 @@
+#simplex_tableau_container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    user-select: none;
+}
+
+#simplex_tableau{
+    display: flex;
+    flex-direction: column;
+    border-collapse: collapse;
+    width: 50%;
+    aspect-ratio: 3/1;
+}
+.row{
+    flex: 1;
+    width: 100%;
+    display:flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+.row > div {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+}
+
+.col_bv{
+    flex: 1;
+}
+
+.col_var, .col_bi, .col_biai{
+    flex: 2;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+#stepper{
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+    margin-top: 20px;
+    align-items: center;
+}
+
+#stepperButtons{
+    display: flex;
+    flex-direction: row;
+    width: 50%;
+}
+
+.stepperButton{
+    padding: 10px;
+    border: 1px solid black;
+    cursor: pointer;
+    flex:1;
+
+}
+#indicators{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.pivot_select_active{
+    background-color: #FCAB64;
+}
+.pivotElement{
+    background-color: #A4303F;
+}
+
