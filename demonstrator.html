@@ -1,0 +1,43 @@
+<html>
+<head>
+    <base href="/">
+    <link rel="stylesheet" href="styles/style.css">
+
+    <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/solver.js"></script>
+    <script type="module" src="js/render.js"></script>
+    <script type="module" src="js/utils.js"></script>
+    <script type="module" src="js/generator.js"></script>
+
+</head>
+<body>
+    <div id="simplex_tableau_container">
+        <div id="simplex_tableau">
+        </div>
+        <div id="stepper">
+            <div id="stepperButtons">
+                <div id="stepBack" class="stepperButton">
+                    previous
+                </div>
+                <div id="stepForth" class="stepperButton">
+                    next
+                </div>
+            </div>
+            <div id="indicators">
+                <div id="stepIndicator">
+                    <label>
+                        Step: 
+                        <span id="stepCount">0</span>
+                    </label>
+                </div>
+                <div id="iterationIndicator">
+                    <label>
+                        Iteration: 
+                        <span id="iterationCount">0</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
