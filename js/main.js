@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const params = new URLSearchParams(queryString);
 
     const id = params.get('id');
-    console.log(id);
+    const mode = params.get('mode');
 
     const simplextable = formatSimplexTableToDataFormat(formatProblemToSimplexTable(generateProblem(id)));
     simplexIterations = solve(simplextable);
@@ -189,7 +189,6 @@ function hideBiaiCol(){
 function markCell(row, col){
     const row_elems = [].slice.call(document.getElementsByClassName("row_" + (isNaN(row) ? row : row + 1)));
     const cell = row_elems.filter((elem) => {return elem.classList.contains("col_" + (isNaN(col) ? col : "x" + (col + 1)))})[0];
-    console.log(cell);
     cell.classList.add("mark_cell");
 }
 

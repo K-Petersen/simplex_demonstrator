@@ -7,9 +7,24 @@
         <h2>Select a Problem</h2>
         <input type="button" value="1" onclick="redirect(1)"/>
         <input type="button" value="2" onclick="redirect(2)"/>
+        <div>
+            <div>
+                <input id="full_animation" type="radio" name="mode" value="1" checked/>
+                <label for="full_animation">Full Animation</label>
+            </div>
+            <div>
+                <input id="scarce_animation" type="radio" name="mode" value="2" />
+                <label for="scarce_animation">Scarce Animation</label>
+            </div>
+            <div>
+                <input id="no_animation" type="radio" name="mode" value="3" />
+                <label for="no_animation">No Animation</label>
+            </div>
+        </div>
         <script>
             function redirect(id){
-                window.location.href = window.location.href + "demonstrator.html?id=" + id
+                const mode = document.querySelector('input[name="mode"]:checked').value;
+                window.location.href = window.location.href + "demonstrator.html?id=" + id + "&mode=" + mode
             }
         </script>
     </body>

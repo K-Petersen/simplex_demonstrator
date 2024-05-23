@@ -68,7 +68,6 @@ export function generateProblem(id){
             problem = simplextable;
             break;
         case "2":
-            console.log("case");
             problem = simplextable2;
             break;
     }
