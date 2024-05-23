@@ -1,4 +1,5 @@
-export function generateProblem(){
+export function generateProblem(id){
+    let problem;
     const simplextable = {
         F:0,
         function:{
@@ -61,8 +62,17 @@ export function generateProblem(){
         ]
     };
 
-
-    return simplextable
+    switch(id){
+        default:
+        case "1":
+            problem = simplextable;
+            break;
+        case "2":
+            console.log("case");
+            problem = simplextable2;
+            break;
+    }
+    return problem;
 }
 
 export function formatProblemToSimplexTable(table){

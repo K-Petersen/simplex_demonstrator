@@ -22,7 +22,14 @@ let simplexIterations = [];
 let HTMLSelectors = {};
 
 document.addEventListener("DOMContentLoaded", function() {
-    const simplextable = formatSimplexTableToDataFormat(formatProblemToSimplexTable(generateProblem()));
+
+    const queryString = window.location.search;
+    const params = new URLSearchParams(queryString);
+
+    const id = params.get('id');
+    console.log(id);
+
+    const simplextable = formatSimplexTableToDataFormat(formatProblemToSimplexTable(generateProblem(id)));
     simplexIterations = solve(simplextable);
 
     const rows = renderSimplexTable(simplexIterations[0].newTable.fRow.length, simplexIterations[0].newTable.constraints.length);
