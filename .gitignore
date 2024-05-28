@@ -1,0 +1,6 @@
+dist
+
+react/.parcel-cache
+react/dist
+react/node_modules
+react/package-lock.json
