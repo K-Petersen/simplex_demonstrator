@@ -1,9 +1,14 @@
 {
   "compilerOptions": {
+    "baseUrl": "./src",
     "target": "esnext",
     "module": "commonjs",
     "jsx": "preserve",
     "jsxImportSource": "react",
     "types": ["react"]
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "**/node_modules/*"
+  ]
 }
