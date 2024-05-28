@@ -13,6 +13,7 @@ import {
     fillFRow,
     fillBiaiCol
 } from "./render.js";
+import { callAnimation, setInitialData } from "./animate.js";
 
 
 let iteration = 0;
@@ -40,6 +41,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     centerSimplexTableau(HTMLSelectors.simplexTable, simplextable)
 
+    HTMLSelectors.biCol = document.getElementsByClassName("col_bi");
     HTMLSelectors.biaiCol = document.getElementsByClassName("col_biai");
     HTMLSelectors.biaiData = document.getElementsByClassName("biai");
     HTMLSelectors.rowData = document.getElementsByClassName("row_data");
@@ -47,7 +49,9 @@ document.addEventListener("DOMContentLoaded", function() {
     HTMLSelectors.stepCountIndicator = document.getElementById("stepCount");
     HTMLSelectors.iterationCountIndicator = document.getElementById("iterationCount");
 
-    document.getElementById("stepForth").addEventListener("click", () => handleStepper(1))
+    // document.getElementById("stepForth").addEventListener("click", () => handleStepper(1))
+    setInitialData(simplexIterations, HTMLSelectors)
+    document.getElementById("stepForth").addEventListener("click", () => callAnimation(mode))
 
     initTable();
 });
