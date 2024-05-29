@@ -93,6 +93,16 @@ function animateStepFull(){
             [...document.getElementById("row_" + pivotrowid).children].forEach((node) => {
                 cleanClasses(node);
             })
+            break;
+        case 12:    
+            [...document.getElementsByClassName("row")].filter(row => row.id != "row_head" && row.id != "row_help" && row.id != ("row_" + pivotrowid)).forEach((row) => {
+                [...row.children].forEach(node => node.classList.add("transformation_undone"))
+            })
+           break;
+
+        case 13:
+            document.getElementById("row_help").classList.remove("hidden");
+            break;
 
     }
 }

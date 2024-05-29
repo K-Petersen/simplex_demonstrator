@@ -6,8 +6,9 @@ export function renderSimplexTable(valuesCount, constraintCount){
     const tableheader = createTableHeader(valuesCount);
     const rows = createBvRows(valuesCount, constraintCount);
     const frow = createFRow(valuesCount);
+    const helpRow = createHelpRow(valuesCount);
     
-    const allRows = [tableheader].concat(rows, [frow]);
+    const allRows = [tableheader].concat(rows, [frow, helpRow]);
     return allRows;
 }
 
@@ -111,6 +112,33 @@ function createFRow(valuesCount){
     fRow.appendChild(biai);
 
     return fRow;
+}
+
+export function createHelpRow(valuesCount){
+    const helpRow = document.createElement("div");
+    helpRow.id = "row_help";
+    helpRow.classList.add("row", "hidden");
+
+    const bv = document.createElement("div");
+    bv.classList.add("col_bv", "row_help");
+    bv.innerHTML = "H";
+    helpRow.appendChild(bv);
+
+    for(let x = 0; x < valuesCount; x++){
+        const cell = document.createElement("div");
+        cell.classList.add("col_var", "col_" + x);
+        helpRow.appendChild(cell)
+    }
+
+    const bi = document.createElement("div");
+    bi.classList.add("col_bi", "row_help");
+    helpRow.appendChild(bi);
+
+    const biai = document.createElement("div");
+    biai.classList.add("col_biai", "row_help", "hiddenForever");
+    helpRow.appendChild(biai);
+
+    return helpRow;
 }
 
 export function centerSimplexTableau(htmlElement, valuesCount){
