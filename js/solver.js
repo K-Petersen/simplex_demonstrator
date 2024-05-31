@@ -2,13 +2,12 @@ let simplexIterations = [];
 
 export function solve(simplextable){
     let iteration = 0;
-    simplexIterations.push({newTable:simplextable});
-
+    initializeIterationObject(iteration)
+    simplexIterations[iteration].newTable = simplextable;
     while(checkOptimizationPotential(simplexIterations[iteration].newTable.fRow)){
+        initializeIterationObject(iteration + 1);
+        iterate(simplexIterations[iteration].newTable, iteration);
         iteration += 1;
-        simplexIterations.push({});
-        initializeIterationObject(iteration);
-        iterate(simplexIterations[iteration - 1].newTable, iteration);
     }
     
     console.log(simplexIterations);
@@ -16,6 +15,7 @@ export function solve(simplextable){
 }
 
 function initializeIterationObject(iteration){
+    simplexIterations.push({});
     simplexIterations[iteration].pivot = {};
     simplexIterations[iteration].newTable = {};
     simplexIterations[iteration].newTable.constraints = [];
@@ -28,16 +28,16 @@ function iterate(table, iteration){
     simplexIterations[i].biai = calculateBiais(table, i);
     const pivotrow = returnPivotRowId(simplexIterations[i].biai);
     simplexIterations[i].pivot.row = pivotrow;
-    simplexIterations[i].newTable.constraints[simplexIterations[i].pivot.row] = calculateNewPivotRow(table.constraints[pivotrow], i);
+    simplexIterations[i + 1].newTable.constraints[simplexIterations[i].pivot.row] = calculateNewPivotRow(table.constraints[pivotrow], i);
     
     const newTable = calculateNewTable(table, i);
     for(var x = 0; x < newTable.constraints.length; x++){
         if(Object.keys(newTable.constraints[x]).length > 0){
-            simplexIterations[i].newTable.constraints[x] = newTable.constraints[x];
+            simplexIterations[i + 1].newTable.constraints[x] = newTable.constraints[x];
         }
     }
-    simplexIterations[i].newTable.F = newTable.F;
-    simplexIterations[i].newTable.fRow = newTable.fRow;
+    simplexIterations[i + 1].newTable.F = newTable.F;
+    simplexIterations[i + 1].newTable.fRow = newTable.fRow;
 }
 
 function checkOptimizationPotential(fRowValues){
@@ -53,11 +53,12 @@ function calculateBiais(table, iteration){
     let biais = [];
     const c = table.constraints;
     for(let x = 0; x < c.length; x++){
-        let biai;
-        if(iteration > 1 && x == simplexIterations[iteration - 1].pivot.row){
-            biai = Infinity;
+        let biai; 
+        const pivotColumnElement = c[x].values[simplexIterations[iteration].pivot.col]
+        if(pivotColumnElement <= 0){
+            biai = Infinity
         }else{
-            biai = c[x].restriction / c[x].values[simplexIterations[iteration].pivot.col];
+            biai = c[x].restriction / pivotColumnElement;
         }
         biais.push(biai)
     }
@@ -91,7 +92,7 @@ function calculateNewTable(table, iteration){
     const c = table.constraints;
     const pivotcolid = simplexIterations[iteration].pivot.col;
     const pivotrowid = simplexIterations[iteration].pivot.row;
-    const pivotrow = simplexIterations[iteration].newTable.constraints[pivotrowid];
+    const pivotrow = simplexIterations[iteration + 1].newTable.constraints[pivotrowid];
     
     let newConstraints = [];
     for(let x = 0; x < c.length ; x++){
@@ -121,7 +122,7 @@ function calculateNewTable(table, iteration){
 function calculateNewRow(row, iteration){
     const pivotcolid = simplexIterations[iteration].pivot.col;
     const pivotrowid = simplexIterations[iteration].pivot.row;
-    const pivotrow = simplexIterations[iteration].newTable.constraints[pivotrowid];
+    const pivotrow = simplexIterations[iteration + 1].newTable.constraints[pivotrowid];
     let newRow = [];
     for(var x = 0; x < row.length; x++){
         const newValue = (pivotrow.values[x] * -1 * row[pivotcolid]) + row[x];

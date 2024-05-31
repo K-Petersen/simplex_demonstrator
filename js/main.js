@@ -49,9 +49,9 @@ document.addEventListener("DOMContentLoaded", function() {
     HTMLSelectors.stepCountIndicator = document.getElementById("stepCount");
     HTMLSelectors.iterationCountIndicator = document.getElementById("iterationCount");
 
-    // document.getElementById("stepForth").addEventListener("click", () => handleStepper(1))
-    setInitialData(simplexIterations, HTMLSelectors)
-    document.getElementById("stepForth").addEventListener("click", () => callAnimation(mode))
+    document.getElementById("stepForth").addEventListener("click", () => handleStepper(1))
+    // setInitialData(simplexIterations, HTMLSelectors)
+    // document.getElementById("stepForth").addEventListener("click", () => callAnimation(mode))
 
     initTable();
 });
@@ -67,11 +67,11 @@ function initTable(){
 }
 
 function handleStepper(direction){
-    if(iteration === 0) iteration++;
+    // if(iteration === 0) iteration++;
     if(direction === 1){
         if(step < 6) {
             step++;
-        }else if(iteration + 1 < simplexIterations.length){
+        }else if(iteration < simplexIterations.length - 2){
             iteration++;
             step = 0;
         }
@@ -220,11 +220,11 @@ function step5(){
     const rowId = simplexIterations[iteration].pivot.row;
     const rowNode = document.getElementById("row_" + rowId)
     unselectPivot();
-    fillRow(simplexIterations[iteration].newTable.constraints[rowId], rowNode)
+    fillRow(simplexIterations[iteration + 1].newTable.constraints[rowId], rowNode)
 }
 
 function step6(){
-    const table = simplexIterations[iteration].newTable;
+    const table = simplexIterations[iteration + 1].newTable;
     for(let node of HTMLSelectors.rowData){
         const rowId = node.dataset.variable;
         if(rowId !== "row_" + simplexIterations[iteration].pivot.row){
