@@ -14,6 +14,7 @@ import {
     fillBiaiCol
 } from "./render.js";
 import { callAnimation, setInitialData } from "./animate.js";
+import { renderHistory } from "./history.js";
 
 
 let iteration = 0;
@@ -49,10 +50,13 @@ document.addEventListener("DOMContentLoaded", function() {
     HTMLSelectors.stepCountIndicator = document.getElementById("stepCount");
     HTMLSelectors.iterationCountIndicator = document.getElementById("iterationCount");
 
+    const history = document.getElementById("history");
+    document.getElementById("showHistory").addEventListener("click", () => handleShowHistory(history))
     document.getElementById("stepForth").addEventListener("click", () => handleStepper(1))
     // setInitialData(simplexIterations, HTMLSelectors)
     // document.getElementById("stepForth").addEventListener("click", () => callAnimation(mode))
 
+    renderHistory(simplexIterations);
     initTable();
 });
 
@@ -87,6 +91,14 @@ function handleStepper(direction){
     }
     
     checkStepAction();
+}
+
+function handleShowHistory(history){
+    if(history.classList.contains("displayNone")){
+        history.classList.remove("displayNone")
+    }else{
+        history.classList.add("displayNone")
+    }
 }
 
 
@@ -143,7 +155,7 @@ function checkStepAction(){
 function selectPivot(selector){
     let elements = document.getElementsByClassName(selector + "_" + simplexIterations[iteration].pivot[selector]);
     for(let node of elements){
-        node.classList.add("pivot_select_active")
+        node.classList.add("pivot")
     }
 }
 
@@ -154,7 +166,7 @@ function unselectPivot(){
     const elements = rows.concat(cols);
 
     for(let node of elements){
-        node.classList.remove("pivot_select_active")
+        node.classList.remove("pivot")
     }
     unselectPivotElement();
 }

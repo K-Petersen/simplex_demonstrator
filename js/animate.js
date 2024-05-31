@@ -51,7 +51,7 @@ function animateStepFull(){
             toggleHighlightFRow(false, HTMLSelectors.fRow.children);
             for(let node of HTMLSelectors.fRow.children){
                 if(node.classList.contains("col_" + pivotcolid)){
-                    node.classList.add("pivot_select_active")
+                    node.classList.add("pivot")
                 }
             }
             break;
@@ -69,7 +69,7 @@ function animateStepFull(){
             toggleHighlightBiRow(false)
             for(let node of HTMLSelectors.biaiData){
                 if(node.classList.contains("row_" + pivotrowid)){
-                    node.classList.add("pivot_select_active")
+                    node.classList.add("pivot")
                 }
             }
             break;
@@ -137,9 +137,9 @@ function togglePivot(show, selector){
     let elements = document.getElementsByClassName(selector + "_" + simplexIterations[iteration].pivot[selector]);
     for(let node of elements){
         if(show){
-            node.classList.add("pivot_select_active")
+            node.classList.add("pivot")
         }else {
-            node.classList.remove("pivot_select_active")
+            node.classList.remove("pivot")
         }
     }
 }
@@ -179,7 +179,7 @@ function togglePivotElement(show){
 function toggleHighlightVariables(show){
     let nbv, bv;
     [...document.getElementById("row_head").children].forEach((node) => {
-        if(node.classList.contains("pivot_select_active")) nbv = node;
+        if(node.classList.contains("pivot")) nbv = node;
     });
     console.log(document.getElementById("row_" + simplexIterations[iteration].pivot.row));
     [...document.getElementById("row_" + simplexIterations[iteration].pivot.row).children].forEach((node) => {
@@ -224,7 +224,7 @@ function fillRow(rowid){
 
 function cleanClasses(node){
     node.classList.remove("highlight");
-    node.classList.remove("pivot_select_active");
+    node.classList.remove("pivot");
     node.classList.remove("pivotElement");
     node.classList.remove("baseSwap");
 }

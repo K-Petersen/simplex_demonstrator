@@ -12,7 +12,7 @@ export function renderSimplexTable(valuesCount, constraintCount){
     return allRows;
 }
 
-function createTableHeader(valuesCount){
+export function createTableHeader(valuesCount){
     const tableHeadRow = document.createElement("div");
     tableHeadRow.id = "row_head";
     tableHeadRow.classList.add("row");

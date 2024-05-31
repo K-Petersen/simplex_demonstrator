@@ -1,4 +1,4 @@
-#simplexTableauContainer{
+.simplexTableauContainer{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -6,7 +6,7 @@
     user-select: none;
 }
 
-#simplexTableau{
+#simplexTableau, .simplexTableau{
     display: flex;
     flex-direction: column;
     border-collapse: collapse;
@@ -71,7 +71,7 @@
     flex-direction: column;
     align-items: center;
 }
-.pivot_select_active{
+.pivot{
     background-color: #FCAB64;
 }
 .pivotElement, .transformation_undone{
@@ -88,4 +88,12 @@
 
 .hiddenForever {
     visibility: hidden !important;
+}
+
+.historyEntry{
+    margin-top: 100px;
+}
+
+.displayNone {
+    display: none;
 }
