@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const rows = renderSimplexTable(simplexIterations[0].newTable.fRow.length, simplexIterations[0].newTable.constraints.length);
 
-    HTMLSelectors.simplexTable = document.getElementById("simplex_tableau");
+    HTMLSelectors.simplexTable = document.getElementById("simplexTableau");
     for(let x = 0; x < rows.length; x++){
         HTMLSelectors.simplexTable.appendChild(rows[x]);
     }

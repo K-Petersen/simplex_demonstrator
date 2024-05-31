@@ -1,4 +1,4 @@
-#simplex_tableau_container{
+#simplexTableauContainer{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -6,7 +6,7 @@
     user-select: none;
 }
 
-#simplex_tableau{
+#simplexTableau{
     display: flex;
     flex-direction: column;
     border-collapse: collapse;
