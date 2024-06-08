@@ -54,7 +54,7 @@ function createHistory(simplexIterations){
     
             const bv = document.createElement("div");
             bv.classList.add("col_bv", "row_" + x, (x === simplexIterations[i].pivot.row ) ? "pivot" : null);
-            bv.innerText = "X" + constraint.variable;
+            bv.innerText = constraint.variable;
             row.appendChild(bv);
     
             for(let y = 0; y < valuesCount; y++){

@@ -4,7 +4,8 @@ export function solve(simplextable){
     let iteration = 0;
     initializeIterationObject(iteration)
     simplexIterations[iteration].newTable = simplextable;
-    while(checkOptimizationPotential(simplexIterations[iteration].newTable.fRow.values)){
+    
+    while(checkOptimizationPotential(simplexIterations[iteration].newTable)){
         initializeIterationObject(iteration + 1);
         iterate(simplexIterations[iteration].newTable, iteration);
         iteration += 1;
@@ -21,12 +22,19 @@ function initializeIterationObject(iteration){
     simplexIterations[iteration].newTable.constraints = [];
     simplexIterations[iteration].newTable.fRow = {};
     simplexIterations[iteration].newTable.fRow.values = [];
+    if("mRow" in simplexIterations[iteration].newTable){
+        if(simplexIterations[iteration - 1].mRow.values.some(x => x < 0)){
+            simplexIterations.newTable.mRow = {};
+            simplexIterations.newTable.mRow.values = [];
+        }
+    }
 
 }
 
 function iterate(table, iteration){
     const i = iteration;
-    const pivotcol = returnPivotColId(table.fRow.values);
+    const isM = ("mRow" in table)
+    const pivotcol = returnPivotColId(isM ? table.mRow.values : table.fRow.values);
     simplexIterations[i].pivot.col = pivotcol;
     simplexIterations[i].biai = calculateBiais(table, i);
     const pivotrow = returnPivotRowId(simplexIterations[i].biai);
@@ -39,11 +47,22 @@ function iterate(table, iteration){
             simplexIterations[i + 1].newTable.constraints[x] = newTable.constraints[x];
         }
     }
-    simplexIterations[i + 1].newTable.fRow.values = newTable.fRow.values;
+    simplexIterations[i + 1].newTable.fRow = newTable.fRow;
+    if("mRow" in simplexIterations[i + 1].newTable){
+        simplexIterations[i + 1].newTable.mRow = newTable.mRow;
+    }
 }
 
-function checkOptimizationPotential(fRowValues){
-    return fRowValues.some(x => x < 0);
+function checkOptimizationPotential(table){
+    let values;
+    
+    if("mRow" in table){
+        values = table.mRow.values
+    }else{
+        values = table.fRow.values
+    }
+
+    return values.some(x => x < 0);
 }
 
 function returnPivotColId(fRowValues){
@@ -84,7 +103,7 @@ function calculateNewPivotRow(oldPivotRow, iteration){
     const newConstraint = {
         values: newPivotRow,
         restriction: newBi,
-        variable: newVariable
+        variable: "x" + newVariable
     }
 
     return newConstraint;
@@ -104,22 +123,29 @@ function calculateNewTable(table, iteration){
             newConstraint = {
                 values: calculateNewRow(c[x].values, iteration),
                 restriction: newBi,
-                variable: c[x].variable
+                variable: "x" + c[x].variable.split("")[1]
             }
         }
         newConstraints.push(newConstraint);
     }
     const newFRow = calculateNewRow(table.fRow.values, iteration);
-    let newF = table.fRow.F + (pivotrow.restriction * -1 * table.fRow.values[pivotcolid])
-
+    const newF = table.fRow.F + (pivotrow.restriction * -1 * table.fRow.values[pivotcolid])
     const newTable = {
         fRow: {
-            values:newFRow,
+            values: newFRow,
             F: newF
         },
         constraints: newConstraints
     }
-
+    if("mRow" in table){
+        const newMRow = calculateNewRow(table.mRow.values, iteration);
+        const newM = table.mRow.M + (pivotrow.restriction * -1 * table.mRow.values[pivotcolid])
+        newTable.mRow = {
+            values: newMRow,
+            M: newM
+        }
+    }
+            
     return newTable;
 }
 

@@ -1,7 +1,9 @@
 import {
     generateProblem,
     formatProblemToSimplexTable,
-    formatSimplexTableToDataFormat
+    formatSimplexTableToDataFormat,
+    addSlackVariables,
+    formatMProblem
 } from "./generator.js";
 
 import { solve } from "./solver.js";
@@ -31,7 +33,10 @@ document.addEventListener("DOMContentLoaded", function() {
     const id = params.get('id');
     const mode = params.get('mode');
 
-    const simplextable = formatSimplexTableToDataFormat(formatProblemToSimplexTable(generateProblem(id)));
+    // const simplextable = formatSimplexTableToDataFormat(formatProblemToSimplexTable(generateProblem(id)));
+    console.log("simplextableM", formatMProblem(generateProblem(3)))
+    const simplextable = formatSimplexTableToDataFormat(addSlackVariables(generateProblem(3)));
+    console.log(simplextable)
     simplexIterations = solve(simplextable);
 
     const rows = renderSimplexTable(simplexIterations[0].newTable.fRow.values.length, simplexIterations[0].newTable.constraints.length);

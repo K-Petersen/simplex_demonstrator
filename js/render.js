@@ -150,7 +150,7 @@ export function fillRow(constraint, htmlNode){
         const classList = [...node.classList];
         
         if (classList.includes("col_bv")){
-            node.innerHTML = "X" + constraint.variable
+            node.innerHTML = constraint.variable
         } else if (classList.includes("col_bi")){
             node.innerHTML = roundToTwoDigits(constraint.restriction);
         } else if (classList.includes("col_var")){
@@ -161,8 +161,7 @@ export function fillRow(constraint, htmlNode){
     }
 }
 
-export function fillFRow(fRow, htmlNode){
-    
+export function fillFRow(fRow, htmlNode){    
     for( let node of htmlNode.children){
         if (node.classList.contains("col_bi")){
             node.innerHTML = fRow.F;

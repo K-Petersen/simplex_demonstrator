@@ -209,7 +209,7 @@ function fillRow(rowid){
         const classList = [...node.classList];
         
         if (classList.includes("col_bv")){
-            node.innerHTML = "X" + constraint.variable
+            node.innerHTML = constraint.variable
         } else if (classList.includes("col_bi")){
             node.innerHTML = roundToTwoDigits(constraint.restriction);
         } else if (classList.includes("col_var")){
