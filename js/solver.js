@@ -4,7 +4,7 @@ export function solve(simplextable){
     let iteration = 0;
     initializeIterationObject(iteration)
     simplexIterations[iteration].newTable = simplextable;
-    while(checkOptimizationPotential(simplexIterations[iteration].newTable.fRow)){
+    while(checkOptimizationPotential(simplexIterations[iteration].newTable.fRow.values)){
         initializeIterationObject(iteration + 1);
         iterate(simplexIterations[iteration].newTable, iteration);
         iteration += 1;
@@ -19,11 +19,14 @@ function initializeIterationObject(iteration){
     simplexIterations[iteration].pivot = {};
     simplexIterations[iteration].newTable = {};
     simplexIterations[iteration].newTable.constraints = [];
+    simplexIterations[iteration].newTable.fRow = {};
+    simplexIterations[iteration].newTable.fRow.values = [];
+
 }
 
 function iterate(table, iteration){
     const i = iteration;
-    const pivotcol = returnPivotColId(table.fRow);
+    const pivotcol = returnPivotColId(table.fRow.values);
     simplexIterations[i].pivot.col = pivotcol;
     simplexIterations[i].biai = calculateBiais(table, i);
     const pivotrow = returnPivotRowId(simplexIterations[i].biai);
@@ -36,8 +39,7 @@ function iterate(table, iteration){
             simplexIterations[i + 1].newTable.constraints[x] = newTable.constraints[x];
         }
     }
-    simplexIterations[i + 1].newTable.F = newTable.F;
-    simplexIterations[i + 1].newTable.fRow = newTable.fRow;
+    simplexIterations[i + 1].newTable.fRow.values = newTable.fRow.values;
 }
 
 function checkOptimizationPotential(fRowValues){
@@ -107,12 +109,14 @@ function calculateNewTable(table, iteration){
         }
         newConstraints.push(newConstraint);
     }
-    const newFRow = calculateNewRow(table.fRow, iteration);
-    let newF = table.F + (pivotrow.restriction * -1 * table.fRow[pivotcolid])
+    const newFRow = calculateNewRow(table.fRow.values, iteration);
+    let newF = table.fRow.F + (pivotrow.restriction * -1 * table.fRow.values[pivotcolid])
 
     const newTable = {
-        F: newF,
-        fRow: newFRow,
+        fRow: {
+            values:newFRow,
+            F: newF
+        },
         constraints: newConstraints
     }
 

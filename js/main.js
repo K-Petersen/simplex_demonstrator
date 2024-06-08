@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const simplextable = formatSimplexTableToDataFormat(formatProblemToSimplexTable(generateProblem(id)));
     simplexIterations = solve(simplextable);
 
-    const rows = renderSimplexTable(simplexIterations[0].newTable.fRow.length, simplexIterations[0].newTable.constraints.length);
+    const rows = renderSimplexTable(simplexIterations[0].newTable.fRow.values.length, simplexIterations[0].newTable.constraints.length);
 
     HTMLSelectors.simplexTable = document.getElementById("simplexTableau");
     for(let x = 0; x < rows.length; x++){
@@ -67,7 +67,7 @@ function initTable(){
         const constraint = table.constraints[rowId];
         fillRow(constraint, node);
     }
-    fillFRow(table.fRow, table.F, HTMLSelectors.fRow);
+    fillFRow(table.fRow, HTMLSelectors.fRow);
 }
 
 function handleStepper(direction){
@@ -244,5 +244,5 @@ function step6(){
 
         }
     }
-    fillFRow(table.fRow, table.F, HTMLSelectors.fRow);
+    fillFRow(table.fRow, HTMLSelectors.fRow);
 }

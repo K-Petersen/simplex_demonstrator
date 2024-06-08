@@ -10,7 +10,7 @@ export function renderHistory(simplexIterations){
 }
 function createHistory(simplexIterations){
     let history = [];
-    const valuesCount = simplexIterations[0].newTable.fRow.length;
+    const valuesCount = simplexIterations[0].newTable.fRow.values.length;
     for(var i = 0; i < simplexIterations.length; i++){
         const table = simplexIterations[i].newTable;
         const node = document.createElement("div");
@@ -89,14 +89,14 @@ function createHistory(simplexIterations){
         for(let x = 0; x < valuesCount; x++){
             const cell = document.createElement("div");
             cell.classList.add("col_var", "col_" + x, (x === simplexIterations[i].pivot.col ? "pivot" : null));
-            cell.innerText = roundToTwoDigits(simplexIterations[i].newTable.fRow[x]);
+            cell.innerText = roundToTwoDigits(simplexIterations[i].newTable.fRow.values[x]);
             fRow.appendChild(cell)
         }
     
         const bi = document.createElement("div");
         bi.id = "FValue";
         bi.classList.add("col_bi");
-        bi.innerHTML = table.F;
+        bi.innerHTML = table.fRow.F;
         fRow.appendChild(bi);
         if(i < simplexIterations.length - 1){
             const biai = document.createElement("div");

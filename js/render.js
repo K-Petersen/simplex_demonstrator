@@ -161,14 +161,15 @@ export function fillRow(constraint, htmlNode){
     }
 }
 
-export function fillFRow(row, F, htmlNode){
+export function fillFRow(fRow, htmlNode){
+    
     for( let node of htmlNode.children){
         if (node.classList.contains("col_bi")){
-            node.innerHTML = F;
+            node.innerHTML = fRow.F;
         } else if (node.classList.contains("col_var")){
             const classList = [...node.classList];
             const colId = classList.filter(className => className.includes("col") && className !== "col_var")[0].split("_")[1];
-            node.innerHTML = roundToTwoDigits(row[colId])
+            node.innerHTML = roundToTwoDigits(fRow.values[colId])
             
         }
     }

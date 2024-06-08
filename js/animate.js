@@ -154,7 +154,6 @@ function fillBiaiCol(){
 }
 
 function toggleShowBiaiCol(show){
-    console.log([...HTMLSelectors.biaiCol]);
     [...HTMLSelectors.biaiCol].forEach(element => {
         if(show){
             element.classList.remove("hidden");
@@ -181,7 +180,6 @@ function toggleHighlightVariables(show){
     [...document.getElementById("row_head").children].forEach((node) => {
         if(node.classList.contains("pivot")) nbv = node;
     });
-    console.log(document.getElementById("row_" + simplexIterations[iteration].pivot.row));
     [...document.getElementById("row_" + simplexIterations[iteration].pivot.row).children].forEach((node) => {
         if(node.classList.contains("col_bv")) bv = node;
     })
