@@ -49,6 +49,7 @@ function createHistory(simplexIterations){
         for(var x = 0; x < simplexIterations[i].newTable.constraints.length; x++){
             const constraint = table.constraints[x];
             const pivotcolid = simplexIterations[i].pivot.col;
+            const isPivotRow = (x === simplexIterations[i].pivot.row);
             const row = document.createElement("div");
             row.classList.add("row");
     
@@ -59,22 +60,21 @@ function createHistory(simplexIterations){
     
             for(let y = 0; y < valuesCount; y++){
                 const cell = document.createElement("div");
-                cell.classList.add("row_" + x, "col_var", "col_" + y, ((y === simplexIterations[i].pivot.col || (x === simplexIterations[i].pivot.row ) ? "pivot" : null)), ((y === simplexIterations[i].pivot.col && (x === simplexIterations[i].pivot.row ) ? "pivotElement" : null)));
+                cell.classList.add("row_" + x, "col_var", "col_" + y, ((y === simplexIterations[i].pivot.col || isPivotRow ? "pivot" : null)), ((y === simplexIterations[i].pivot.col && (x === simplexIterations[i].pivot.row ) ? "pivotElement" : null)));
                 cell.innerText = roundToTwoDigits(constraint.values[y]);  
                 row.appendChild(cell)
             }
             const bi = document.createElement("div");
-            bi.classList.add("row_" + x, "col_bi");
+            bi.classList.add("row_" + x, "col_bi", (isPivotRow ? "pivot" : null));
             bi.innerText = constraint.restriction;  
             row.appendChild(bi);
     
             if(i < simplexIterations.length - 1){
                 const biaij = document.createElement("div");
-                biaij.classList.add("row_" + x, "col_biaij", "biaij");
-                biaij.innerText = simplexIterations[i].biai !== undefined ? constraint.restriction + " / " + constraint.values[pivotcolid] + " = " + roundToTwoDigits(simplexIterations[i].biai[x]) : "";  
+                biaij.classList.add("row_" + x, "col_biaij", "biaij", (isPivotRow ? "pivot" : null));
+                biaij.innerText = simplexIterations[i].biaijs !== undefined ? constraint.restriction + " / " + constraint.values[pivotcolid] + " = " + roundToTwoDigits(simplexIterations[i].biaijs[x]) : "";  
                 row.appendChild(biaij);
             }
-            
             node.appendChild(row);
         }
         
