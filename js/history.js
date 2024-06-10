@@ -106,6 +106,36 @@ function createHistory(simplexIterations){
 
         node.appendChild(fRow);
 
+        if("mRow" in simplexIterations[i].newTable){
+
+            const mRow = document.createElement("div");
+            mRow.classList.add("row");
+
+            const bv = document.createElement("div");
+            bv.classList.add("col_bv");
+            bv.innerText = "M";
+            mRow.appendChild(bv);
+            for(let x = 0; x < valuesCount; x++){
+                const cell = document.createElement("div");
+                cell.classList.add("col_var", "col_" + x, (x === simplexIterations[i].pivot.col ? "pivot" : null));
+                cell.innerText = roundToTwoDigits(simplexIterations[i].newTable.mRow.values[x]);
+                mRow.appendChild(cell)
+            }
+
+            const bi = document.createElement("div");
+            bi.id = "MValue";
+            bi.classList.add("col_bi");
+            bi.innerHTML = table.mRow.M;
+            mRow.appendChild(bi);
+            if(i < simplexIterations.length - 1){
+                const biaij = document.createElement("div");
+                biaij.classList.add("col_biaij", "hidden");
+                mRow.appendChild(biaij);
+            }
+            
+            node.appendChild(mRow);
+
+        }
         history.push(node);
     }
     return history;
