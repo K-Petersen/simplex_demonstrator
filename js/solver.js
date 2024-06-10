@@ -36,8 +36,8 @@ function iterate(table, iteration){
     const isM = ("mRow" in table)
     const pivotcol = returnPivotColId(isM ? table.mRow.values : table.fRow.values);
     simplexIterations[i].pivot.col = pivotcol;
-    simplexIterations[i].biai = calculateBiais(table, i);
-    const pivotrow = returnPivotRowId(simplexIterations[i].biai);
+    simplexIterations[i].biaijs = calculateBiaijs(table, i);
+    const pivotrow = returnPivotRowId(simplexIterations[i].biaijs);
     simplexIterations[i].pivot.row = pivotrow;
     simplexIterations[i + 1].newTable.constraints[simplexIterations[i].pivot.row] = calculateNewPivotRow(table.constraints[pivotrow], i);
     
@@ -48,7 +48,7 @@ function iterate(table, iteration){
         }
     }
     simplexIterations[i + 1].newTable.fRow = newTable.fRow;
-    if("mRow" in simplexIterations[i + 1].newTable){
+    if("mRow" in newTable && newTable.mRow.values.some(x => x < 0)){
         simplexIterations[i + 1].newTable.mRow = newTable.mRow;
     }
 }
@@ -70,25 +70,25 @@ function returnPivotColId(fRowValues){
     return fRowValues.indexOf(min);
 }
 
-function calculateBiais(table, iteration){
-    let biais = [];
+function calculateBiaijs(table, iteration){
+    let biaijs = [];
     const c = table.constraints;
     for(let x = 0; x < c.length; x++){
-        let biai; 
+        let biaij; 
         const pivotColumnElement = c[x].values[simplexIterations[iteration].pivot.col]
         if(pivotColumnElement <= 0){
-            biai = Infinity
+            biaij = Infinity
         }else{
-            biai = c[x].restriction / pivotColumnElement;
+            biaij = c[x].restriction / pivotColumnElement;
         }
-        biais.push(biai)
+        biaijs.push(biaij)
     }
-    return biais;
+    return biaijs;
 }
 
-function returnPivotRowId(biais){
-    const min = Math.min(...biais);
-    return biais.indexOf(min);
+function returnPivotRowId(biaijs){
+    const min = Math.min(...biaijs);
+    return biaijs.indexOf(min);
 }
 
 function calculateNewPivotRow(oldPivotRow, iteration){
@@ -145,6 +145,7 @@ function calculateNewTable(table, iteration){
             M: newM
         }
     }
+    console.log(newTable)
             
     return newTable;
 }

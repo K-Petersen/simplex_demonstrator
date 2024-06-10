@@ -39,10 +39,10 @@ function createHistory(simplexIterations){
         tableHeadRow.appendChild(bi_head);
 
         if(i < simplexIterations.length - 1){
-            const biai = document.createElement("div");
-            biai.classList.add("col_biai", "row_head");
-            biai.innerHTML = "bi/aij";
-            tableHeadRow.appendChild(biai);
+            const biaij = document.createElement("div");
+            biaij.classList.add("col_biaij", "row_head");
+            biaij.innerHTML = "bi/aij";
+            tableHeadRow.appendChild(biaij);
         }
 
         node.appendChild(tableHeadRow);
@@ -69,10 +69,10 @@ function createHistory(simplexIterations){
             row.appendChild(bi);
     
             if(i < simplexIterations.length - 1){
-                const biai = document.createElement("div");
-                biai.classList.add("row_" + x, "col_biai", "biai");
-                biai.innerText = simplexIterations[i].biai !== undefined ? constraint.restriction + " / " + constraint.values[pivotcolid] + " = " + roundToTwoDigits(simplexIterations[i].biai[x]) : "";  
-                row.appendChild(biai);
+                const biaij = document.createElement("div");
+                biaij.classList.add("row_" + x, "col_biaij", "biaij");
+                biaij.innerText = simplexIterations[i].biai !== undefined ? constraint.restriction + " / " + constraint.values[pivotcolid] + " = " + roundToTwoDigits(simplexIterations[i].biai[x]) : "";  
+                row.appendChild(biaij);
             }
             
             node.appendChild(row);
@@ -99,9 +99,9 @@ function createHistory(simplexIterations){
         bi.innerHTML = table.fRow.F;
         fRow.appendChild(bi);
         if(i < simplexIterations.length - 1){
-            const biai = document.createElement("div");
-            biai.classList.add("col_biai", "hidden");
-            fRow.appendChild(biai);
+            const biaij = document.createElement("div");
+            biaij.classList.add("col_biaij", "hidden");
+            fRow.appendChild(biaij);
         }
 
         node.appendChild(fRow);

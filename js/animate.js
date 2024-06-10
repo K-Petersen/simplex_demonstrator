@@ -62,12 +62,12 @@ function animateStepFull(){
             toggleHighlightBiRow(true)
             break;
         case 5:
-            fillBiaiCol();
-            toggleShowBiaiCol(true)
+            fillBiaijCol();
+            toggleShowBiaijCol(true)
             break;
         case 6:
             toggleHighlightBiRow(false)
-            for(let node of HTMLSelectors.biaiData){
+            for(let node of HTMLSelectors.biaijData){
                 if(node.classList.contains("row_" + pivotrowid)){
                     node.classList.add("pivot")
                 }
@@ -75,7 +75,7 @@ function animateStepFull(){
             break;
         case 7:
             togglePivot(true, "row");
-            toggleShowBiaiCol(false)
+            toggleShowBiaijCol(false)
             break;
         case 8:
             togglePivotElement(true);
@@ -144,8 +144,8 @@ function togglePivot(show, selector){
     }
 }
 
-function fillBiaiCol(){
-    for(const [i, node] of Object.entries([...HTMLSelectors.biaiData])){
+function fillBiaijCol(){
+    for(const [i, node] of Object.entries([...HTMLSelectors.biaijData])){
         const si = simplexIterations;
         const constraint = si[iteration-1].newTable.constraints[i];
         node.innerText = constraint.restriction + "/" + constraint.values[si[iteration].pivot.col] + " = " + si[iteration].biai[i]
@@ -153,8 +153,8 @@ function fillBiaiCol(){
     }
 }
 
-function toggleShowBiaiCol(show){
-    [...HTMLSelectors.biaiCol].forEach(element => {
+function toggleShowBiaijCol(show){
+    [...HTMLSelectors.biaijCol].forEach(element => {
         if(show){
             element.classList.remove("hidden");
         }else{

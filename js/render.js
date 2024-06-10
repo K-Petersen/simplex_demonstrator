@@ -1,15 +1,23 @@
 import { roundToTwoDigits } from "./utils.js";
 
 
-export function renderSimplexTable(valuesCount, constraintCount){
+export function renderSimplexTable(simplexIterationObject){
+    const table = simplexIterationObject.newTable;
+    const valuesCount = table.fRow.values.length
+    const constraintCount = table.constraints.length
 
-    const tableheader = createTableHeader(valuesCount);
-    const rows = createBvRows(valuesCount, constraintCount);
-    const frow = createFRow(valuesCount);
-    const helpRow = createHelpRow(valuesCount);
+    let rows = [];
     
-    const allRows = [tableheader].concat(rows, [frow, helpRow]);
-    return allRows;
+    rows.push(createTableHeader(valuesCount));
+    for(let x = 0; x < constraintCount; x++){
+        const constraint = table.constraints[x];
+        rows.push(createRow(constraint.values, constraint.restriction, constraint.variable, x));
+    }
+    rows.push(createRow(table.fRow.values, table.fRow.F, "f"))
+    if("mRow" in table) rows.push(createRow(table.mRow.values, table.mRow.M, "m"))
+    rows.push(createRow(Array(valuesCount).fill(""), "", "help"))
+    
+    return rows;
 }
 
 export function createTableHeader(valuesCount){
@@ -18,7 +26,6 @@ export function createTableHeader(valuesCount){
     tableHeadRow.classList.add("row");
 
     const bv = document.createElement("div");
-    // bv.id = "bv";
     bv.classList.add("col_bv", "row_head");
     bv.innerHTML = "BV";
     tableHeadRow.appendChild(bv);
@@ -32,86 +39,57 @@ export function createTableHeader(valuesCount){
     }
 
     const bi = document.createElement("div");
-    // bi.id = "bi";
     bi.classList.add("col_bi", "row_head");
     bi.innerHTML = "bi";
     tableHeadRow.appendChild(bi);
 
-    const biai = document.createElement("div");
-    // biai.id = "biai";
-    biai.classList.add("col_biai", "row_head", "hidden");
-    biai.innerHTML = "bi/aij";
-    tableHeadRow.appendChild(biai);
+    const biaij = document.createElement("div");
+    biaij.classList.add("col_biaij", "row_head", "hidden");
+    biaij.innerHTML = "bi/aij";
+    tableHeadRow.appendChild(biaij);
 
-    // tableHeadRow.childNodes.forEach((child) => {
-    //     child.classList.add("cell");
-    // })
 
     return tableHeadRow;
 }
 
-function createBvRows(valuesCount, constraintCount){
-    let bvRows = []
-    for(let x = 0; x < constraintCount; x++){
-        const row = document.createElement("div");
-        row.id = "row_"+ x;
-        row.dataset.variable = x;
-        row.classList.add("row", "row_data");
-
-        const bv = document.createElement("div");
-        bv.classList.add("col_bv", "row_" + x);
-        row.appendChild(bv);
-
-        for(let y = 0; y < valuesCount; y++){
-            const cell = document.createElement("div");
-            cell.classList.add("row_" + x, "col_" + y, "col_var");
-            row.appendChild(cell)
-        }
-        const bi = document.createElement("div");
-        bi.classList.add("row_" + x, "col_bi");
-        row.appendChild(bi);
-
-        const biai = document.createElement("div");
-        biai.classList.add("row_" + x, "col_biai", "biai", "hidden");
-        row.appendChild(biai);
-
-        // row.childNodes.forEach((child) => {
-        //     child.classList.add("cell");
-        // })
-        
-        bvRows.push(row);
-    }
-
-    return bvRows;
-}
-
-function createFRow(valuesCount){
-    const fRow = document.createElement("div");
-    fRow.id = "row_f";
-    fRow.classList.add("row");
-
+function createRow(values, biValue, rowId, index = -1){
+    const row = document.createElement("div");
+    const rowClass = "row_" + (index === -1 ? rowId : index);
+    row.id = rowClass;
+    row.dataset.variable = rowId;
+    row.classList.add("row");
+    
     const bv = document.createElement("div");
-    // bv.id = "F";
-    bv.classList.add("col_bv", "row_f");
-    bv.innerHTML = "F";
-    fRow.appendChild(bv);
-
-    for(let x = 0; x < valuesCount; x++){
-        const cell = document.createElement("div");
-        cell.classList.add("col_var", "col_" + x);
-        fRow.appendChild(cell)
+    bv.classList.add(rowClass, "col_bv");
+    let bvText;
+    if(Number(rowId) == rowId){
+        bvText = rowId
+        row.classList.add("row_data")
+    }else{
+        bvText = rowId.toUpperCase()
+        if(rowId == "help"){
+            row.classList.add("hidden")
+        }
     }
+    bv.innerText = bvText;
+    row.appendChild(bv);
 
+    for(let x = 0; x < values.length; x++){
+        const cell = document.createElement("div");
+        cell.innerText = values[x]
+        cell.classList.add(rowClass, "col_" + x, "col_var");
+        row.appendChild(cell)
+    }
     const bi = document.createElement("div");
-    bi.id = "FValue";
-    bi.classList.add("col_bi", "row_f");
-    fRow.appendChild(bi);
+    bi.innerText = biValue;
+    bi.classList.add(rowClass, "col_bi");
+    row.appendChild(bi);
 
-    const biai = document.createElement("div");
-    biai.classList.add("col_biai", "row_f", "hidden");
-    fRow.appendChild(biai);
+    const biaij = document.createElement("div");
+    biaij.classList.add(rowClass, "col_biaij", "biaij", "hidden");
+    row.appendChild(biaij);
 
-    return fRow;
+    return row;
 }
 
 export function createHelpRow(valuesCount){
@@ -134,9 +112,9 @@ export function createHelpRow(valuesCount){
     bi.classList.add("col_bi", "row_help");
     helpRow.appendChild(bi);
 
-    const biai = document.createElement("div");
-    biai.classList.add("col_biai", "row_help", "hiddenForever");
-    helpRow.appendChild(biai);
+    const biaij = document.createElement("div");
+    biaij.classList.add("col_biaij", "row_help", "hidden");
+    helpRow.appendChild(biaij);
 
     return helpRow;
 }
@@ -148,7 +126,6 @@ export function centerSimplexTableau(htmlElement, valuesCount){
 export function fillRow(constraint, htmlNode){
     for( let node of htmlNode.children){
         const classList = [...node.classList];
-        
         if (classList.includes("col_bv")){
             node.innerHTML = constraint.variable
         } else if (classList.includes("col_bi")){
@@ -161,23 +138,23 @@ export function fillRow(constraint, htmlNode){
     }
 }
 
-export function fillFRow(fRow, htmlNode){    
+export function fillZRow(zRow, htmlNode, z){    
     for( let node of htmlNode.children){
         if (node.classList.contains("col_bi")){
-            node.innerHTML = fRow.F;
+            node.innerHTML = z === "f" ? zRow.F : zRow.M;
         } else if (node.classList.contains("col_var")){
             const classList = [...node.classList];
             const colId = classList.filter(className => className.includes("col") && className !== "col_var")[0].split("_")[1];
-            node.innerHTML = roundToTwoDigits(fRow.values[colId])
+            node.innerHTML = roundToTwoDigits(zRow.values[colId])
             
         }
     }
 }
 
-export function fillBiaiCol(biais, biaiColHTML){
-    for( let node of biaiColHTML){
+export function fillBiaijCol(biaijs, biaijColHTML){
+    for( let node of biaijColHTML){
         const classList = [...node.classList];
         const rowid = classList.filter(className => className.includes("row"))[0].split("_")[1];       
-        node.innerHTML = biais[rowid] !== Infinity ? roundToTwoDigits(biais[rowid]) : ""
+        node.innerHTML = biaijs[rowid] !== Infinity ? roundToTwoDigits(biaijs[rowid]) : ""
     }
 }

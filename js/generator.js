@@ -73,7 +73,7 @@ export function generateProblem(id){
             values: []
         },
         function:{
-            type: "min",
+            type: "max",
             values: [1, -1.5]
         },
         constraints:[
@@ -160,22 +160,26 @@ function doesRestrictionGetM(res){
     return res.type !== "lessthan" && res.value === Math.abs(res.value)
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    // console.log(formatMProblem(generateProblem(3)))
-    // console.log(addSlackVariables(generateProblem(1)))
-})
-
-export function formatMProblem(table){
+export function formatProblem(table){
     let newTable = structuredClone(table);
-    delete newTable.function;
+    const originalValuesCount = table.function.values.length;
     newTable.function = minToMax(table.function)
-    for(var x = 0; x < newTable.constraints.length; x++){
-        newTable.constraints[x] = transformConstraint(newTable.constraints[x])
+    const c = newTable.constraints;
+    let m = false;
+    for(var x = 0; x < c.length; x++){
+        newTable.constraints[x] = transformConstraint(c[x])
+        if(doesRestrictionGetM(c[x].restriction)) m = true;
     }
     newTable = addSlackVariables(newTable);
-    newTable.mRow = getMRow(newTable);
     newTable.fRow = getFRow(newTable);
-    console.log(newTable)
+    if(m){
+        newTable.mRow = getMRow(newTable, originalValuesCount);
+    }
+
+    delete newTable.function;
+    for(var x = 0; x < c.length; x++){
+        newTable.constraints[x].restriction = c[x].restriction.value
+    }
     return newTable
 }
 
@@ -212,7 +216,6 @@ export function addSlackVariables(table){
             m[x] = 1
         }
     }
-    
     let yCount = 0;
     for(var x = 0; x < constraints.length; x++){
         let newConstraint = structuredClone(constraints[x]);
@@ -245,7 +248,6 @@ export function addSlackVariables(table){
         }
         newTable.constraints[x] = newConstraint;
     }
-
     return newTable;
     
 }
@@ -271,8 +273,8 @@ function minToMax(func){
     let newFunction = structuredClone(func);
     if(newFunction.type === "min"){
         newFunction.type = "max";
-        newFunction.values = invertArrayEntries(newFunction.values)
     }
+    newFunction.values = invertArrayEntries(newFunction.values)
     return newFunction
 }
 
@@ -281,21 +283,21 @@ function invertArrayEntries(arr){
 }
 
 function getMRow(table){
-    console.log(table)
     const newTable = structuredClone(table);
+    const yCount = newTable.constraints.filter(x => x.variable.includes("y")).length;
     let mRow = {};
     mRow.M = 0;
     mRow.values = Array(newTable.constraints[0].values.length).fill(0);
     for(var x = 0; x < newTable.constraints.length; x++){
-        const constraint = newTable.constraints[x];
-        if(constraint.variable.includes("y")){
-            for(var y = 0; y < constraint.values.length - newTable.function.values.length; y++){
-                const val =  constraint.values[y];
+        const c = newTable.constraints[x];
+        if(c.variable.includes("y")){
+            for(var y = 0; y < c.values.length - yCount; y++){
+                const val =  c.values[y];
                 if(val != null){
                     mRow.values[y] -= val;
                 }
             }
-            mRow.M -= constraint.restriction.value
+            mRow.M -= c.restriction.value
         }
     }
     return mRow

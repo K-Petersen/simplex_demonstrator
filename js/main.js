@@ -1,9 +1,6 @@
 import {
     generateProblem,
-    formatProblemToSimplexTable,
-    formatSimplexTableToDataFormat,
-    addSlackVariables,
-    formatMProblem
+    formatProblem
 } from "./generator.js";
 
 import { solve } from "./solver.js";
@@ -12,8 +9,8 @@ import {
     renderSimplexTable,
     centerSimplexTableau,
     fillRow,
-    fillFRow,
-    fillBiaiCol
+    fillZRow,
+    fillBiaijCol
 } from "./render.js";
 import { callAnimation, setInitialData } from "./animate.js";
 import { renderHistory } from "./history.js";
@@ -34,24 +31,22 @@ document.addEventListener("DOMContentLoaded", function() {
     const mode = params.get('mode');
 
     // const simplextable = formatSimplexTableToDataFormat(formatProblemToSimplexTable(generateProblem(id)));
-    console.log("simplextableM", formatMProblem(generateProblem(3)))
-    const simplextable = formatSimplexTableToDataFormat(addSlackVariables(generateProblem(3)));
-    console.log(simplextable)
-    simplexIterations = solve(simplextable);
+    simplexIterations = solve(formatProblem(generateProblem(id)));
 
-    const rows = renderSimplexTable(simplexIterations[0].newTable.fRow.values.length, simplexIterations[0].newTable.constraints.length);
+    const rows = renderSimplexTable(simplexIterations[0]);
 
     HTMLSelectors.simplexTable = document.getElementById("simplexTableau");
     for(let x = 0; x < rows.length; x++){
         HTMLSelectors.simplexTable.appendChild(rows[x]);
     }
-    centerSimplexTableau(HTMLSelectors.simplexTable, simplextable)
+    centerSimplexTableau(HTMLSelectors.simplexTable, simplexIterations[0])
 
     HTMLSelectors.biCol = document.getElementsByClassName("col_bi");
-    HTMLSelectors.biaiCol = document.getElementsByClassName("col_biai");
-    HTMLSelectors.biaiData = document.getElementsByClassName("biai");
+    HTMLSelectors.biaijCol = document.getElementById("simplexTableau").querySelectorAll(".col_biaij");
+    HTMLSelectors.biaijData = document.getElementById("simplexTableau").querySelectorAll(".biaij");
     HTMLSelectors.rowData = document.getElementsByClassName("row_data");
     HTMLSelectors.fRow = document.getElementById("row_f");
+    HTMLSelectors.mRow = document.getElementById("row_m");
     HTMLSelectors.stepCountIndicator = document.getElementById("stepCount");
     HTMLSelectors.iterationCountIndicator = document.getElementById("iterationCount");
 
@@ -62,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // document.getElementById("stepForth").addEventListener("click", () => callAnimation(mode))
 
     renderHistory(simplexIterations);
-    initTable();
+    // initTable();
 });
 
 function initTable(){
@@ -72,7 +67,7 @@ function initTable(){
         const constraint = table.constraints[rowId];
         fillRow(constraint, node);
     }
-    fillFRow(table.fRow, HTMLSelectors.fRow);
+    fillZRow(table.fRow, HTMLSelectors.fRow);
 }
 
 function handleStepper(direction){
@@ -195,14 +190,14 @@ function unselectPivotElement(){
 }
 
 
-function showBiaiCol(){
-    [...HTMLSelectors.biaiCol].forEach(element => {
+function showBiaijCol(){
+    [...HTMLSelectors.biaijCol].forEach(element => {
         element.classList.remove("hidden");
     });
 }
 
-function hideBiaiCol(){
-    [...HTMLSelectors.biaiCol].forEach(element => {
+function hideBiaijCol(){
+    [...HTMLSelectors.biaijCol].forEach(element => {
         element.classList.add("hidden");
     });
 }
@@ -218,8 +213,9 @@ function step1(){
 }
 
 function step2(){
-    showBiaiCol();
-    fillBiaiCol(simplexIterations[iteration].biai, HTMLSelectors.biaiData);
+    showBiaijCol();
+    console.log(simplexIterations[iteration].biaijs)
+    fillBiaijCol(simplexIterations[iteration].biaijs, HTMLSelectors.biaijData);
 }
 
 function step3(){
@@ -228,8 +224,8 @@ function step3(){
 }
 
 function step4(){
-    hideBiaiCol();
-    fillBiaiCol(Array(simplexIterations[iteration].biai.length).fill(""), HTMLSelectors.biaiData);
+    hideBiaijCol();
+    fillBiaijCol(Array(simplexIterations[iteration].biaijs.length).fill(""), HTMLSelectors.biaijData);
     selectPivotElement();
 }
 
@@ -249,5 +245,9 @@ function step6(){
 
         }
     }
-    fillFRow(table.fRow, HTMLSelectors.fRow);
+    console.log(table)
+    fillZRow(table.fRow, HTMLSelectors.fRow, "f");
+    if("mRow" in table){
+        fillZRow(table.mRow, HTMLSelectors.mRow, "m");
+    }
 }

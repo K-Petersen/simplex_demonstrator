@@ -37,12 +37,8 @@
     flex: 1;
 }
 
-.col_var, .col_bi, .col_biai{
+.col_var, .col_bi, .col_biaij{
     flex: 2;
-}
-
-.hidden {
-    visibility: hidden;
 }
 
 #stepper{
@@ -86,7 +82,7 @@
     background-color: #A4303F;
 }
 
-.hiddenForever {
+.hidden {
     visibility: hidden !important;
 }
 
