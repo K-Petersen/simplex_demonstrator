@@ -123,7 +123,7 @@ function calculateNewTable(table, iteration){
             newConstraint = {
                 values: calculateNewRow(c[x].values, iteration),
                 restriction: newBi,
-                variable: "x" + c[x].variable.split("")[1]
+                variable: c[x].variable
             }
         }
         newConstraints.push(newConstraint);
