@@ -4,7 +4,8 @@ export function generateProblem(id){
         fRow:{
             F: 0,
             values: []
-        },        function:{
+        },        
+        function:{
             type: "max",
             values: [10,20]
         },
@@ -73,7 +74,7 @@ export function generateProblem(id){
             values: []
         },
         function:{
-            type: "max",
+            type: "min",
             values: [1, -1.5]
         },
         constraints:[
@@ -273,8 +274,9 @@ function minToMax(func){
     let newFunction = structuredClone(func);
     if(newFunction.type === "min"){
         newFunction.type = "max";
+    }else{
+        newFunction.values = invertArrayEntries(newFunction.values)
     }
-    newFunction.values = invertArrayEntries(newFunction.values)
     return newFunction
 }
 
