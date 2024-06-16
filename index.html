@@ -1,31 +1,53 @@
 <html>
     <head>
         <base href="/">
+        <title>Simplex Demonstrator</title>
+        <link rel="stylesheet" href="styles/layout.css"/>
+        <link rel="stylesheet" href="styles/simplexTable.css">
+        <link rel="stylesheet" href="styles/style.css">
+        <script type="module" src="js/newMain.js"></script>
+        <script type="module" src="js/solver.js"></script>
+        <script type="module" src="js/render.js"></script>
+        <script type="module" src="js/animate.js"></script>
+        <script type="module" src="js/utils.js"></script>
+        <script type="module" src="js/generator.js"></script>
     </head>
     <body>
-        <h1>Simplex Demonstrator</h1>
-        <h2>Select a Problem</h2>
-        <input type="button" value="1" onclick="redirect(1)"/>
-        <input type="button" value="2" onclick="redirect(2)"/>
-        <div>
-            <div>
-                <input id="full_animation" type="radio" name="mode" value="1" checked/>
-                <label for="full_animation">Full Animation</label>
+        <div id="navbar" class="navbar">
+            <div id="logo">
+                <svg></svg>
             </div>
-            <div>
-                <input id="scarce_animation" type="radio" name="mode" value="2" />
-                <label for="scarce_animation">Scarce Animation</label>
-            </div>
-            <div>
-                <input id="no_animation" type="radio" name="mode" value="3" />
-                <label for="no_animation">No Animation</label>
+            <h1 id="headline">Simplex Demonstrator</h1>
+            <div id="problemSelector">
+                <label for="simplexproblems">Select a Problem</label>
+                <select name="simplexproblems" id="selectSimplexproblems"></select>
             </div>
         </div>
-        <script>
-            function redirect(id){
-                const mode = document.querySelector('input[name="mode"]:checked').value;
-                window.location.href = window.location.href + "demonstrator.html?id=" + id + "&mode=" + mode
-            }
-        </script>
+        <div id="content">
+            <section id="problem">
+                <div id="problemUntransformed"></div>
+                <div id="problemTransformed"></div>
+            </section>
+            <section id="simplex">
+                <div id="animationContainer" class="simplexTableContainer">
+                    <div id="mainTable" class="simplexTable"></div>
+                </div>
+                <div id="history">
+                    <div id="steps" class="simplexTableContainer">
+                        <h3>Steps</h3>
+                    </div>
+                    <div id="solution" class="simplexTableContainer">
+                        <h3>Solution</h3>
+                    </div>
+                </div>
+            </section>
+            
+        </div>
+        <footer id="controls" class="navbar">
+            <div id="showSteps" class="button">Show steps</div>
+            <div id="showSolution" class="button">Show solution</div>
+            <div id="previousStep" class="button stepper"><</div>
+            <div id="nextStep" class="button stepper">></div>
+        </footer>
     </body>
 </html>
