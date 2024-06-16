@@ -218,7 +218,6 @@ function step1(){
 
 function step2(){
     showBiaijCol();
-    console.log(simplexIterations[iteration].biaijs)
     fillBiaijCol(simplexIterations[iteration].biaijs, HTMLSelectors.biaijData);
 }
 
@@ -249,7 +248,6 @@ function step6(){
 
         }
     }
-    console.log(table)
     fillZRow(table.fRow, HTMLSelectors.fRow, "f");
     if("mRow" in table){
         fillZRow(table.mRow, HTMLSelectors.mRow, "m");
