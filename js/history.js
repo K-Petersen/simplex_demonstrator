@@ -14,6 +14,9 @@ function createHistory(simplexIterations){
     for(var i = 0; i < simplexIterations.length; i++){
         const table = simplexIterations[i].newTable;
         const node = document.createElement("div");
+
+        const yCount = table.constraints.filter(x => x.variable.includes("y")).length;
+        
         node.classList.add("historyEntry", "simplexTableau")
 
         const tableHeadRow = document.createElement("div");
@@ -28,7 +31,12 @@ function createHistory(simplexIterations){
         for(let x = 0; x < valuesCount; x++){
             const headcell = document.createElement("div");
             headcell.classList.add("row_head", "col_" + x, "col_var", (x === simplexIterations[i].pivot.col ) ? "pivot" : null);
-            const text = document.createTextNode("X" + (x + 1));
+            let text = "";
+            if(x >= valuesCount - yCount){
+                text = document.createTextNode("y" + (x - valuesCount + yCount + 1));
+            }else{
+                text = document.createTextNode("x" + (x + 1));
+            } 
             headcell.appendChild(text);
             tableHeadRow.appendChild(headcell)
         }

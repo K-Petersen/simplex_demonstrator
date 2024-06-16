@@ -3,14 +3,15 @@ import {
     formatProblem
 } from "./generator.js";
 
-import { solve } from "./solver.js";
+import { setVariableIndexPairing, solve } from "./solver.js";
 
 import {
     renderSimplexTable,
     centerSimplexTableau,
     fillRow,
     fillZRow,
-    fillBiaijCol
+    fillBiaijCol,
+    getVariableToCssClassPairing
 } from "./render.js";
 import { callAnimation, setInitialData } from "./animate.js";
 import { renderHistory } from "./history.js";
@@ -30,8 +31,10 @@ document.addEventListener("DOMContentLoaded", function() {
     const id = params.get('id');
     const mode = params.get('mode');
 
-    // const simplextable = formatSimplexTableToDataFormat(formatProblemToSimplexTable(generateProblem(id)));
-    simplexIterations = solve(formatProblem(generateProblem(id)));
+    const simplextable = formatProblem(generateProblem(id))
+    const yCount = simplextable.constraints.filter(x => x.variable.includes("y")).length;
+    setVariableIndexPairing(getVariableToCssClassPairing(simplextable.constraints[0].values.length - yCount, yCount ))
+    simplexIterations = solve(simplextable);
 
     const rows = renderSimplexTable(simplexIterations[0]);
 
@@ -39,6 +42,7 @@ document.addEventListener("DOMContentLoaded", function() {
     for(let x = 0; x < rows.length; x++){
         HTMLSelectors.simplexTable.appendChild(rows[x]);
     }
+
     centerSimplexTableau(HTMLSelectors.simplexTable, simplexIterations[0])
 
     HTMLSelectors.biCol = document.getElementsByClassName("col_bi");

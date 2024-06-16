@@ -5,22 +5,25 @@ export function renderSimplexTable(simplexIterationObject){
     const table = simplexIterationObject.newTable;
     const valuesCount = table.fRow.values.length
     const constraintCount = table.constraints.length
+    const yCount = table.constraints.filter(x => x.variable.includes("y")).length;
 
     let rows = [];
     
-    rows.push(createTableHeader(valuesCount));
+    rows.push(createTableHeader(valuesCount, yCount));
     for(let x = 0; x < constraintCount; x++){
         const constraint = table.constraints[x];
         rows.push(createRow(constraint.values, constraint.restriction, constraint.variable, x));
     }
     rows.push(createRow(table.fRow.values, table.fRow.F, "f"))
-    if("mRow" in table) rows.push(createRow(table.mRow.values, table.mRow.M, "m"))
+    if("mRow" in table){
+        rows.push(createRow(table.mRow.values, table.mRow.M, "m"))
+    } 
     rows.push(createRow(Array(valuesCount).fill(""), "", "help"))
     
     return rows;
 }
 
-export function createTableHeader(valuesCount){
+export function createTableHeader(valuesCount, yCount){
     const tableHeadRow = document.createElement("div");
     tableHeadRow.id = "row_head";
     tableHeadRow.classList.add("row");
@@ -33,7 +36,12 @@ export function createTableHeader(valuesCount){
     for(let x = 0; x < valuesCount; x++){
         const headcell = document.createElement("div");
         headcell.classList.add("row_head", "col_" + x, "col_var");
-        const text = document.createTextNode("X" + (x + 1));
+        let text = "";
+        if(x >= valuesCount - yCount){
+            text = document.createTextNode("y" + (x - valuesCount + yCount + 1));
+        }else{
+            text = document.createTextNode("x" + (x + 1));
+        } 
         headcell.appendChild(text);
         tableHeadRow.appendChild(headcell)
     }
@@ -158,3 +166,18 @@ export function fillBiaijCol(biaijs, biaijColHTML){
         node.innerHTML = biaijs[rowid] !== Infinity ? roundToTwoDigits(biaijs[rowid]) : ""
     }
 }
+ export function getVariableToCssClassPairing(valuesCount, yCount){
+    let variableSelectorPairs = {};
+     for(var y = 0; y < yCount; y++){
+        variableSelectorPairs["y" + (y + 1)] = valuesCount + y;
+    }
+    return variableSelectorPairs;
+ }
+
+ export function hideYColumn(id){
+    [...document.getElementById("simplexTableau").querySelectorAll(".col_" + id)].forEach(x => x.classList.add("displayNone"))
+ }
+
+ export function hideMRow(){
+    document.getElementById("mRow").classList.add("displayNone")
+ }

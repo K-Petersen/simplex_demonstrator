@@ -1,4 +1,5 @@
 let simplexIterations = [];
+let variableIndexPairing;
 
 export function solve(simplextable){
     let iteration = 0;
@@ -42,15 +43,26 @@ function iterate(table, iteration){
     simplexIterations[i + 1].newTable.constraints[simplexIterations[i].pivot.row] = calculateNewPivotRow(table.constraints[pivotrow], i);
     
     const newTable = calculateNewTable(table, i);
+
+    
     for(var x = 0; x < newTable.constraints.length; x++){
         if(Object.keys(newTable.constraints[x]).length > 0){
+            if(isM){
+                const yId = variableIndexPairing[simplexIterations[i].newTable.constraints[pivotcol].variable]
+                newTable.constraints[x].values.splice(yId,1);
+            }
             simplexIterations[i + 1].newTable.constraints[x] = newTable.constraints[x];
         }
     }
-    simplexIterations[i + 1].newTable.fRow = newTable.fRow;
-    if("mRow" in newTable && newTable.mRow.values.some(x => x < 0)){
-        simplexIterations[i + 1].newTable.mRow = newTable.mRow;
+    if(isM){
+        const yId = variableIndexPairing[simplexIterations[i].newTable.constraints[pivotcol].variable]
+        newTable.mRow.values.splice(yId,1);
+        newTable.fRow.values.splice(yId,1);
+        if(newTable.mRow.values.some(x => x < 0)){
+            simplexIterations[i + 1].newTable.mRow = newTable.mRow;
+        }
     }
+    simplexIterations[i + 1].newTable.fRow = newTable.fRow;
 }
 
 function checkOptimizationPotential(table){
@@ -161,4 +173,8 @@ function calculateNewRow(row, iteration){
     }
     
     return newRow;
+}
+
+export function setVariableIndexPairing(vip){
+    variableIndexPairing = vip;
 }
