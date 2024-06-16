@@ -1,6 +1,15 @@
 import { roundToTwoDigits } from "./utils.js";
 
 
+export function renderTable(simplexIterationObject, node){
+    const rows = renderSimplexTable(simplexIterationObject);
+
+    for(let x = 0; x < rows.length; x++){
+        node.appendChild(rows[x]);
+    }
+}
+
+
 export function renderSimplexTable(simplexIterationObject){
     const table = simplexIterationObject.newTable;
     const valuesCount = table.fRow.values.length
@@ -18,7 +27,7 @@ export function renderSimplexTable(simplexIterationObject){
     if("mRow" in table){
         rows.push(createRow(table.mRow.values, table.mRow.M, "m"))
     } 
-    rows.push(createRow(Array(valuesCount).fill(""), "", "help"))
+    // rows.push(createRow(Array(valuesCount).fill(""), "", "help"))
     
     return rows;
 }
@@ -84,7 +93,7 @@ function createRow(values, biValue, rowId, index = -1){
 
     for(let x = 0; x < values.length; x++){
         const cell = document.createElement("div");
-        cell.innerText = values[x]
+        cell.innerText = roundToTwoDigits(values[x])
         cell.classList.add(rowClass, "col_" + x, "col_var");
         row.appendChild(cell)
     }

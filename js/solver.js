@@ -157,7 +157,6 @@ function calculateNewTable(table, iteration){
             M: newM
         }
     }
-    console.log(newTable)
             
     return newTable;
 }
