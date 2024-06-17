@@ -106,5 +106,70 @@ export const problems = [
                 }
             ]
         }
+    },
+    {
+        title: "Klausur WiSe 20/21",
+        problem: {
+            fRow:{
+                F: 0,
+                values: []
+            },
+            function:{
+                type: "max",
+                values: [7, 3, -4]
+            },
+            constraints:[
+                {
+                    values:[2,1,-1],
+                    restriction:{
+                        type:"lessthan",
+                        value:18,
+                    }
+                },
+                {
+                    values:[1,3,0],
+                    restriction:{
+                        type:"lessthan",
+                        value:17,
+                    }
+                },
+            ]
+        }
+    },
+    {
+        title: "Klausur SoSe 21",
+        problem: {
+            fRow:{
+                F: 0,
+                values: []
+            },
+            function:{
+                type: "max",
+                values: [3,2]
+            },
+            constraints:[
+                {
+                    values:[2,1],
+                    restriction:{
+                        type:"lessthan",
+                        value:18,
+                    }
+                },
+                {
+                    values:[3,1],
+                    restriction:{
+                        type:"lessthan",
+                        value:15,
+                    }
+                },
+                {
+                    values:[4,1],
+                    restriction:{
+                        type:"lessthan",
+                        value:16,
+                    }
+                },
+            ]
+        }
     }
 ]
