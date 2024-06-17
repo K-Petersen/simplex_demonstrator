@@ -1,4 +1,4 @@
-import { roundToTwoDigits } from "./utils.js";
+import { capitalizeFirstLetter, invertArrayEntries, roundToTwoDigits } from "./utils.js";
 
 
 export function renderTable(simplexIterationObject, node){
@@ -137,8 +137,76 @@ export function createHelpRow(valuesCount){
     return helpRow;
 }
 
-export function centerSimplexTableau(htmlElement, valuesCount){
-    htmlElement.style.marginLeft = (50 / ((valuesCount + 2) * 2) + 1) + "%";
+export function renderProblem(node, problem){
+
+    node.replaceChildren()
+
+    let yCount = 0;
+    if("variable" in problem.constraints[0]){
+        yCount = problem.constraints.filter(x => x.variable.includes("y")).length;
+    }
+    console.log(yCount)
+
+    let func;
+    if("function" in problem){
+        func = problem.function
+    }else{
+        func = structuredClone(problem.fRow);
+        func.values = invertArrayEntries(func.values);
+
+    } 
+
+
+    //FUNCTION
+    const functionNode = document.createElement("span");
+    let functionInnerHTML = "";
+    for(var x = 0; x < func.values.length; x ++){
+        if(func.values[x] === 0) continue;
+
+        const values = func.values;
+        const sign = (values[x] === Math.abs(values[x]) ? "+" : "-");
+        const val = func.values[x];
+        functionInnerHTML += (x > 0 ? " " + sign + " " + Math.abs(val) : val) + "x" + "<sub>" + (x + 1) + "</sub>"
+    }
+    functionNode.innerHTML = ( "type" in func ? capitalizeFirstLetter(func.type) : "Max") + " F(x) = " + functionInnerHTML;
+    node.appendChild(functionNode)
+
+
+    //CONSTRAINTS
+    for(var x = 0; x < problem.constraints.length; x++){
+        const constraint = problem.constraints[x];
+        const constraintNode = document.createElement("span");
+        constraintNode.classList.add("constraint")
+
+        let constraintInnerHTML = "";
+
+        const values = constraint.values;
+        for(var y = 0; y < values.length; y++){
+            if(values[y] === 0){
+                constraintInnerHTML += "<span></span>";
+                continue;
+            } 
+            const sign = (values[y] === Math.abs(values[y]) ? "+" : "-");
+            const val = (y > 0 ? " " + sign + " " + (Math.abs(values[y]) === 1 ? "" : values[y]) : (Math.abs(values[y]) === 1 ? (sign === "+" ? "" : values[y]) : values[y]))
+            constraintInnerHTML += "<span>" + val + ( !(yCount > 0 && y + 1 > (func.values.length - yCount)) ? "x" + "<sub>" + (y + 1) + "</sub>": "y" + "<sub>" + (y + 1 - (func.values.length - yCount)) + "</sub>") + "</span>";
+        }
+        const sign = (constraint.restriction.type === "lessthan" ? "<=" : (constraint.restriction.type === "greaterthan" ? ">=" : "="))
+        const val = "<span>" + sign + "</span> <span>" + (constraint.restriction === Number(constraint.restriction) ? constraint.restriction : constraint.restriction.value) + "</span>"
+        constraintNode.innerHTML = constraintInnerHTML + val;
+
+        node.appendChild(constraintNode);
+    }
+
+    //>=0 CONSTRAINT
+    const constraintNode = document.createElement("span");
+    constraintNode.classList.add("constraint")
+    let constraintInnerHTML = "";
+    for(var x = 0; x < func.values.length; x++){
+        constraintInnerHTML += "<span>" + ( !(yCount > 0 && x + 1 > (func.values.length - yCount)) ? "x" + "<sub>" + (x + 1) + "</sub>": "y" + "<sub>" + (x + 1 - (func.values.length - yCount)) + "</sub>") + (x + 1 < func.values.length ? "," : "") + "</span>";
+    }
+    constraintInnerHTML += "<span>>=</span> <span>0</span>";
+    constraintNode.innerHTML = constraintInnerHTML;
+    node.appendChild(constraintNode)
 }
 
 export function fillRow(constraint, htmlNode){
