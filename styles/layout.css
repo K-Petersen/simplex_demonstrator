@@ -15,6 +15,13 @@ body{
     flex-basis: 1;
     flex-grow: 0;
 }
+#logo{
+    width: 400px;
+    height: 80px;
+    background-image: url("../resources/Logo_CW.svg");
+    background-size: cover;
+    background-position-y: -37px;
+}
 
 #content{
     padding: 140px 0;
