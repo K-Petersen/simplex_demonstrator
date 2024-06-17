@@ -1,5 +1,5 @@
 import { problems } from "../resources/problems.js"
-
+import { invertArrayEntries } from "./utils.js"
 export function fillProblemDropdown(node){
     for(let x = 0; x < problems.length; x++){
         const newOption = document.createElement("option");
@@ -7,6 +7,10 @@ export function fillProblemDropdown(node){
         newOption.innerText = problems[x].title
         node.appendChild(newOption)
     }
+}
+
+export function returnPlainProblem(id){
+    return problems[id].problem;
 }
 
 export function formatProblemToSimplexTable(table){
@@ -157,10 +161,6 @@ function minToMax(func){
         newFunction.values = invertArrayEntries(newFunction.values)
     }
     return newFunction
-}
-
-function invertArrayEntries(arr){
-    return arr.map(x => {return x * -1})
 }
 
 function getMRow(table){
