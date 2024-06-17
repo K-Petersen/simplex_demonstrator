@@ -32,12 +32,40 @@ body{
     overflow: scroll;
 }
 
-#problem{
-
+.problemContainer{
+    flex:1;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-#simplex{
-    
+#problem{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+ 
+    margin-bottom: 80px;
+}
+
+.problem{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.problem > span:not(:first-child) {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+}
+.constraint > span{
+    width: 50px;
+    text-align: start;
+}
+.constraint > span:last-child{
+    width: 100px;
 }
 
 #animationContainer{
