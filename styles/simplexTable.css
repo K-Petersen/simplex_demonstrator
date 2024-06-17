@@ -29,6 +29,10 @@
     flex: 1;
 }
 
-.col_var, .col_bi, .col_biaij{
+.col_var, .col_bi{
     flex: 2;
+}
+
+.col_biaij{
+    flex: 3;
 }

@@ -26,9 +26,9 @@ export function renderSimplexTable(simplexIterationObject){
         const constraint = table.constraints[x];
         rows.push(createRow(constraint.values, constraint.restriction, constraint.variable, x));
     }
-    rows.push(createRow(table.fRow.values, table.fRow.F, "f"))
+    rows.push(createRow(table.fRow.values, table.fRow.F, "F"))
     if("mRow" in table){
-        rows.push(createRow(table.mRow.values, table.mRow.M, "m"))
+        rows.push(createRow(table.mRow.values, table.mRow.M, "M"))
     } 
     // rows.push(createRow(Array(valuesCount).fill(""), "", "help"))
     
@@ -81,12 +81,10 @@ function createRow(values, biValue, rowId, index = -1){
     
     const bv = document.createElement("div");
     bv.classList.add(rowClass, "col_bv");
-    let bvText;
+    const bvText = rowId;
     if(Number(rowId) == rowId){
-        bvText = rowId
         row.classList.add("row_data")
     }else{
-        bvText = rowId.toUpperCase()
         if(rowId == "help"){
             row.classList.add("hidden")
         }
