@@ -16,6 +16,9 @@ export function solve(simplextable){
     return simplexIterations;
 }
 
+export function clearIterations(){
+    simplexIterations = [];
+}
 function initializeIterationObject(iteration){
     simplexIterations.push({});
     simplexIterations[iteration].pivot = {};
@@ -43,7 +46,7 @@ function iterate(table, iteration){
     simplexIterations[i + 1].newTable.constraints[simplexIterations[i].pivot.row] = calculateNewPivotRow(table.constraints[pivotrow], i);
     
     const newTable = calculateNewTable(table, i);
-
+    
     
     for(var x = 0; x < newTable.constraints.length; x++){
         if(Object.keys(newTable.constraints[x]).length > 0){
@@ -58,6 +61,7 @@ function iterate(table, iteration){
         const yId = variableIndexPairing[simplexIterations[i].newTable.constraints[pivotcol].variable]
         newTable.mRow.values.splice(yId,1);
         newTable.fRow.values.splice(yId,1);
+        simplexIterations[i + 1].newTable.constraints[simplexIterations[i].pivot.row].values.splice(yId, 1);
         if(newTable.mRow.values.some(x => x < 0)){
             simplexIterations[i + 1].newTable.mRow = newTable.mRow;
         }

@@ -1,119 +1,12 @@
-export function generateProblem(id){
-    let problem;
-    const simplextable = {
-        fRow:{
-            F: 0,
-            values: []
-        },        
-        function:{
-            type: "max",
-            values: [10,20]
-        },
-        constraints:[
-            {
-                values:[1,1],
-                restriction:{
-                    type:"lessthan",
-                    value:100,
-                }
-            },
-            {
-                values:[6,9],
-                restriction:{
-                    type:"lessthan",
-                    value:720,
-                }
-            },
-            {
-                values:[0,1],
-                restriction:{
-                    type:"lessthan",
-                    value:60,
-                }
-            }
-        ]
-    };
+import { problems } from "../resources/problems.js"
 
-    const simplextable2 = {
-        fRow:{
-            F: 0,
-            values: []
-        },        
-        function:{
-            type: "max",
-            values: [3,4]
-        },
-        constraints:[
-            {
-                values:[3,2],
-                restriction:{
-                    type:"lessthan",
-                    value:1200,
-                }
-            },
-            {
-                values:[5,10],
-                restriction:{
-                    type:"lessthan",
-                    value:3000,
-                }
-            },
-            {
-                values:[0,(1/2)],
-                restriction:{
-                    type:"lessthan",
-                    value:125,
-                }
-            }
-        ]
-    };
-
-    const mMethodTable = {
-        fRow:{
-            F: 0,
-            values: []
-        },
-        function:{
-            type: "min",
-            values: [1, -1.5]
-        },
-        constraints:[
-            {
-                values:[1,1],
-                restriction:{
-                    type:"greaterthan",
-                    value:2,
-                }
-            },
-            {
-                values:[-1,1],
-                restriction:{
-                    type:"equal",
-                    value:1,
-                }
-            },
-            {
-                values:[3, 2],
-                restriction:{
-                    type:"lessthan",
-                    value:12,
-                }
-            }
-        ]
-    };
-
-    switch(Number(id)){
-        default:
-        case 1:
-            problem = simplextable;
-            break;
-        case 2:
-            problem = simplextable2;
-            break;
-        case 3:
-            problem = mMethodTable;
+export function fillProblemDropdown(node){
+    for(let x = 0; x < problems.length; x++){
+        const newOption = document.createElement("option");
+        newOption.value = x;
+        newOption.innerText = problems[x].title
+        node.appendChild(newOption)
     }
-    return problem;
 }
 
 export function formatProblemToSimplexTable(table){
@@ -142,26 +35,12 @@ export function formatSimplexTableToDataFormat(table){
     return table;
 }
 
-function isTableStandard(table){
-    for(var x = 0; x < table.constraints.length; x++){
-        if(!isRestrictionStandard(table.constraints[x].restriction)) return false
-    }
-    return true
-}
-
-function isRestrictionStandard(res){
-    return res.type === "lessthan" && res.value === Math.abs(res.value)
-}
-
-function doesRestrictionGetSlack(res){
-    return res.type === "lessthan" || res.type === "greaterthan";
-}
-
 function doesRestrictionGetM(res){
     return res.type !== "lessthan" && res.value === Math.abs(res.value)
 }
 
-export function formatProblem(table){
+export function formatProblem(id){
+    const table = problems[id].problem;
     let newTable = structuredClone(table);
     const originalValuesCount = table.function.values.length;
     newTable.function = minToMax(table.function)

@@ -2,6 +2,9 @@ import { roundToTwoDigits } from "./utils.js";
 
 
 export function renderTable(simplexIterationObject, node){
+
+    node.replaceChildren()
+
     const rows = renderSimplexTable(simplexIterationObject);
 
     for(let x = 0; x < rows.length; x++){

@@ -1,34 +1,45 @@
-import { solve } from "./solver.js";
-import { generateProblem, formatProblem } from "./generator.js";
+import { clearIterations, setVariableIndexPairing, solve } from "./solver.js";
+import { formatProblem, fillProblemDropdown } from "./generator.js";
 import { renderEndTable, renderHistory } from "./history.js";
-import { renderTable } from "./render.js";
+import { getVariableToCssClassPairing, renderTable } from "./render.js";
 
 
 let simplexIterations = [];
 
 document.addEventListener("DOMContentLoaded", function() {
     
-    const id = 1; //replace by dropdown value
+    const problemDropdown = document.getElementById("selectSimplexproblems");
+    const stepsContainer = document.getElementById("stepsContainer");
+    const solutionContainer = document.getElementById("solutionContainer");
 
-    const simplextable = formatProblem(generateProblem(id))
+    fillProblemDropdown(problemDropdown);
+    init(problemDropdown[problemDropdown.options.selectedIndex].value);
+
+    document.getElementById("selectSimplexproblems").addEventListener("change", (e) => handleChangeDropdown(e));
+    document.getElementById("showSteps").addEventListener("click", () => handleShow(stepsContainer));
+    document.getElementById("showSolution").addEventListener("click", () => handleShow(solutionContainer));
+
+});
+
+function init(id){
+    const mainTable = document.getElementById("mainTable");
+    const simplextable = formatProblem(id)
+    const yCount = simplextable.constraints.filter(x => x.variable.includes("y")).length;
+    setVariableIndexPairing(getVariableToCssClassPairing(simplextable.constraints[0].values.length - yCount, yCount ))
     simplexIterations = solve(simplextable);
 
     initSimplexTables(simplexIterations);
-});
+}
 
 function initSimplexTables(simplexIterations){
     const mainTable = document.getElementById("mainTable");
-    const steps = document.getElementById("steps");
-    const solution = document.getElementById("solution");
 
     renderTable(simplexIterations[0], mainTable);
     renderEndTable(simplexIterations);
     renderHistory(simplexIterations);
-    handleShow(steps);
-    handleShow(solution);
+    if(!stepsContainer.classList.contains("displayNone")) handleShow(stepsContainer);
+    if(!solutionContainer.classList.contains("displayNone")) handleShow(solutionContainer);
 
-    document.getElementById("showSteps").addEventListener("click", () => handleShow(steps));
-    document.getElementById("showSolution").addEventListener("click", () => handleShow(solution));
 }
 
 function handleShow(node){
@@ -37,4 +48,11 @@ function handleShow(node){
     }else{
         node.classList.add("displayNone")
     }
+}
+
+function handleChangeDropdown(e){
+    const index = e.target.options.selectedIndex;
+    const id = e.target.options[index].value
+    clearIterations();
+    init(id);
 }
