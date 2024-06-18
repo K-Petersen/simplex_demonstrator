@@ -63,7 +63,7 @@ function handleChangeDropdown(e){
     const id = e.target.options[index].value
     clearIterations();
     init(id);
-    handleShowTransformedProblem()
+    if(!document.getElementById("problemTransformed").classList.contains("displayNone")) handleShowTransformedProblem();
 }
 
 function handleShowTransformedProblem(){
