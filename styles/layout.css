@@ -131,8 +131,10 @@ body{
 
     cursor: pointer;
     user-select: none;
+
+    background-color: white;
 }
 
-.button:active{
+.button:not(select):active{
     box-shadow: 0px -1px;
 }
