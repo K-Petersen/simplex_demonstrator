@@ -49,24 +49,24 @@ export function createTableHeader(valuesCount, yCount){
     for(let x = 0; x < valuesCount; x++){
         const headcell = document.createElement("div");
         headcell.classList.add("row_head", "col_" + x, "col_var");
-        let text = "";
+        let html;
         if(x >= valuesCount - yCount){
-            text = document.createTextNode("y" + (x - valuesCount + yCount + 1));
+            html = "<span>y<sub>" + (x - valuesCount + yCount + 1) +"</sub></span>";
         }else{
-            text = document.createTextNode("x" + (x + 1));
+            html = "<span>x<sub>" + (x + 1) + "</sub></span>";
         } 
-        headcell.appendChild(text);
+        headcell.innerHTML = html;
         tableHeadRow.appendChild(headcell)
     }
 
     const bi = document.createElement("div");
     bi.classList.add("col_bi", "row_head");
-    bi.innerHTML = "bi";
+    bi.innerHTML = "<span>b<sub>i</sub></span>";
     tableHeadRow.appendChild(bi);
 
     const biaij = document.createElement("div");
     biaij.classList.add("col_biaij", "row_head", "hidden");
-    biaij.innerHTML = "bi/aij";
+    biaij.innerHTML = "<span>b<sub>i</sub><span>a<sub>ij</sub></span></span>";
     tableHeadRow.appendChild(biaij);
 
 
@@ -82,7 +82,8 @@ function createRow(values, biValue, biaijValue, rowId, index = -1){
     
     const bv = document.createElement("div");
     bv.classList.add(rowClass, "col_bv");
-    const bvText = rowId;
+
+    const bvHTML = rowId.includes("y") || rowId.includes("x") ? "<span>" + rowId.split("")[0] + "<sub>" + rowId.split("")[1] + "</sub></span>": rowId;
     if(Number(rowId) == rowId){
         row.classList.add("row_data")
     }else{
@@ -90,7 +91,7 @@ function createRow(values, biValue, biaijValue, rowId, index = -1){
             row.classList.add("hidden")
         }
     }
-    bv.innerText = bvText;
+    bv.innerHTML = bvHTML;
     row.appendChild(bv);
 
     for(let x = 0; x < values.length; x++){
