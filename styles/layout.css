@@ -67,7 +67,7 @@ h2{
     width: 100%;
 }
 .constraint > span{
-    width: 50px;
+    width: 75px;
     text-align: start;
 }
 .constraint > span:last-child{
