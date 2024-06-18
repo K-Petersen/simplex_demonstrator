@@ -6,6 +6,10 @@ body{
 
 }
 
+h2{
+    margin-bottom: 25px;
+}
+
 #navbar{
     border-bottom: 2px solid;
 }
@@ -45,6 +49,8 @@ body{
     flex-direction: row;
     flex-wrap: nowrap;
  
+    padding-bottom: 80px;
+    border-bottom: 2px dashed black;
     margin-bottom: 80px;
 }
 
