@@ -24,11 +24,12 @@ export function renderSimplexTable(simplexIterationObject){
     rows.push(createTableHeader(valuesCount, yCount));
     for(let x = 0; x < constraintCount; x++){
         const constraint = table.constraints[x];
-        rows.push(createRow(constraint.values, constraint.restriction, constraint.variable, x));
+        const biaijVal = ("biaijs" in simplexIterationObject ?  constraint.restriction + " / " +constraint.values[simplexIterationObject.pivot.col] + " = " + simplexIterationObject.biaijs[x] : "")
+        rows.push(createRow(constraint.values, constraint.restriction, biaijVal, constraint.variable, x));
     }
-    rows.push(createRow(table.fRow.values, table.fRow.F, "F"))
+    rows.push(createRow(table.fRow.values, table.fRow.F, "", "F"))
     if("mRow" in table){
-        rows.push(createRow(table.mRow.values, table.mRow.M, "M"))
+        rows.push(createRow(table.mRow.values, table.mRow.M, "", "M"))
     } 
     // rows.push(createRow(Array(valuesCount).fill(""), "", "help"))
     
@@ -72,7 +73,7 @@ export function createTableHeader(valuesCount, yCount){
     return tableHeadRow;
 }
 
-function createRow(values, biValue, rowId, index = -1){
+function createRow(values, biValue, biaijValue, rowId, index = -1){
     const row = document.createElement("div");
     const rowClass = "row_" + (index === -1 ? rowId : index);
     row.id = rowClass;
@@ -104,6 +105,7 @@ function createRow(values, biValue, rowId, index = -1){
     row.appendChild(bi);
 
     const biaij = document.createElement("div");
+    biaij.innerText = biaijValue;
     biaij.classList.add(rowClass, "col_biaij", "biaij", "hidden");
     row.appendChild(biaij);
 
