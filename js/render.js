@@ -190,7 +190,7 @@ export function renderProblem(node, problem){
             const val = (y > 0 ? " " + sign + " " + (Math.abs(values[y]) === 1 ? "" : values[y]) : (Math.abs(values[y]) === 1 ? (sign === "+" ? "" : values[y]) : values[y]))
             constraintInnerHTML += "<span>" + val + ( !(yCount > 0 && y + 1 > (func.values.length - yCount)) ? "x" + "<sub>" + (y + 1) + "</sub>": "y" + "<sub>" + (y + 1 - (func.values.length - yCount)) + "</sub>") + "</span>";
         }
-        const sign = (constraint.restriction.type === "lessthan" ? "<=" : (constraint.restriction.type === "greaterthan" ? ">=" : "="))
+        const sign = (constraint.restriction.type === "lessthan" ? "&le;" : (constraint.restriction.type === "greaterthan" ? ">=" : "="))
         const val = "<span>" + sign + "</span> <span>" + (constraint.restriction === Number(constraint.restriction) ? constraint.restriction : constraint.restriction.value) + "</span>"
         constraintNode.innerHTML = constraintInnerHTML + val;
 
@@ -204,7 +204,7 @@ export function renderProblem(node, problem){
     for(var x = 0; x < func.values.length; x++){
         constraintInnerHTML += "<span>" + ( !(yCount > 0 && x + 1 > (func.values.length - yCount)) ? "x" + "<sub>" + (x + 1) + "</sub>": "y" + "<sub>" + (x + 1 - (func.values.length - yCount)) + "</sub>") + (x + 1 < func.values.length ? "," : "") + "</span>";
     }
-    constraintInnerHTML += "<span>>=</span> <span>0</span>";
+    constraintInnerHTML += "<span>&ge;</span> <span>0</span>";
     constraintNode.innerHTML = constraintInnerHTML;
     node.appendChild(constraintNode)
 }
