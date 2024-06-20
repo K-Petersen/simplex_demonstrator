@@ -21,10 +21,6 @@
     border: 1px solid black;
 }
 
-#row_help {
-    margin-top: 40px;
-}
-
 .col_bv{
     flex: 1;
 }

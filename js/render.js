@@ -31,7 +31,6 @@ export function renderSimplexTable(simplexIterationObject){
     if("mRow" in table){
         rows.push(createRow(table.mRow.values, table.mRow.M, "", "M"))
     } 
-    // rows.push(createRow(Array(valuesCount).fill(""), "", "help"))
     
     return rows;
 }
@@ -66,7 +65,7 @@ export function createTableHeader(valuesCount, yCount){
 
     const biaij = document.createElement("div");
     biaij.classList.add("col_biaij", "row_head", "hidden");
-    biaij.innerHTML = "<span>b<sub>i</sub><span>a<sub>ij</sub></span></span>";
+    biaij.innerHTML = "<span>b<sub>i</sub>/<span>a<sub>ij</sub></span></span>";
     tableHeadRow.appendChild(biaij);
 
 
@@ -86,10 +85,6 @@ function createRow(values, biValue, biaijValue, rowId, index = -1){
     const bvHTML = rowId.includes("y") || rowId.includes("x") ? "<span>" + rowId.split("")[0] + "<sub>" + rowId.split("")[1] + "</sub></span>": rowId;
     if(Number(rowId) == rowId){
         row.classList.add("row_data")
-    }else{
-        if(rowId == "help"){
-            row.classList.add("hidden")
-        }
     }
     bv.innerHTML = bvHTML;
     row.appendChild(bv);
@@ -107,37 +102,11 @@ function createRow(values, biValue, biaijValue, rowId, index = -1){
 
     const biaij = document.createElement("div");
     biaij.innerText = biaijValue;
-    biaij.classList.add(rowClass, "col_biaij", "biaij", "hidden");
+    biaij.classList.add(rowClass, "col_biaij", "hidden");
+    if(rowId.includes("x") || rowId.includes("y")) biaij.classList.add("biaij");
     row.appendChild(biaij);
 
     return row;
-}
-
-export function createHelpRow(valuesCount){
-    const helpRow = document.createElement("div");
-    helpRow.id = "row_help";
-    helpRow.classList.add("row", "hidden");
-
-    const bv = document.createElement("div");
-    bv.classList.add("col_bv", "row_help");
-    bv.innerHTML = "H";
-    helpRow.appendChild(bv);
-
-    for(let x = 0; x < valuesCount; x++){
-        const cell = document.createElement("div");
-        cell.classList.add("col_var", "col_" + x);
-        helpRow.appendChild(cell)
-    }
-
-    const bi = document.createElement("div");
-    bi.classList.add("col_bi", "row_help");
-    helpRow.appendChild(bi);
-
-    const biaij = document.createElement("div");
-    biaij.classList.add("col_biaij", "row_help", "hidden");
-    helpRow.appendChild(biaij);
-
-    return helpRow;
 }
 
 export function renderProblem(node, problem){
@@ -156,7 +125,6 @@ export function renderProblem(node, problem){
     }else{
         func = structuredClone(problem.fRow);
         func.values = invertArrayEntries(func.values);
-
     } 
 
 
