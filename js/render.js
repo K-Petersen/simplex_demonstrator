@@ -24,7 +24,7 @@ export function renderSimplexTable(simplexIterationObject){
     rows.push(createTableHeader(valuesCount, yCount));
     for(let x = 0; x < constraintCount; x++){
         const constraint = table.constraints[x];
-        const biaijVal = ("biaijs" in simplexIterationObject ?  constraint.restriction + " / " +constraint.values[simplexIterationObject.pivot.col] + " = " + simplexIterationObject.biaijs[x] : "")
+        const biaijVal = ("biaijs" in simplexIterationObject ?  constraint.restriction + " / " +constraint.values[simplexIterationObject.pivot.col] + " = " + roundToTwoDigits(simplexIterationObject.biaijs[x]) : "")
         rows.push(createRow(constraint.values, constraint.restriction, biaijVal, constraint.variable, x));
     }
     rows.push(createRow(table.fRow.values, table.fRow.F, "", "F"))
