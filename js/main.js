@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("showSteps").addEventListener("click", () => handleShow(stepsContainer));
     document.getElementById("showSolution").addEventListener("click", () => handleShow(solutionContainer));
     document.getElementById("showTransformedProblem").addEventListener("click", handleShowTransformedProblem);
-    document.getElementById("previousStep").addEventListener("click", () => handleAnimation(0))
+    // document.getElementById("previousStep").addEventListener("click", () => handleAnimation(0))
     document.getElementById("nextStep").addEventListener("click", () => handleAnimation(1))
     
 });
