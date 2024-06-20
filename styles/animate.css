@@ -1,7 +1,26 @@
+.pivot{
+    background-color: #FCAB64;
+}
+.pivotElement, .transformation_undone{
+    background-color: #A4303F;
+}
+
+.highlight{
+    background-color: #ADFFD9;
+}
+
+.baseSwap{
+    background-color: #A4303F;
+}
+
 .hidden {
     visibility: hidden !important;
 }
 
 .displayNone {
     display: none !important;
+}
+
+.blackout {
+    background-color: black !important;
 }
