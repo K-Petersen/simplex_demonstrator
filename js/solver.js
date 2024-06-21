@@ -12,7 +12,6 @@ export function solve(simplextable){
         iteration += 1;
     }
     
-    console.log(simplexIterations);
     return simplexIterations;
 }
 

@@ -41,7 +41,6 @@ function init(id){
 
 
     initSimplexTables(simplexIterations);
-    console.log(simplexIterations)
     initDataForAnimation(simplexIterations, vip);
     
 
