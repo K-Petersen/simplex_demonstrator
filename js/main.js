@@ -39,9 +39,7 @@ function init(id){
     simplexIterations = solve(simplextable);
 
 
-
     initSimplexTables(simplexIterations);
-    console.log(simplexIterations)
     initDataForAnimation(simplexIterations, vip);
     
 

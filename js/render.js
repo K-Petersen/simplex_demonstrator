@@ -117,8 +117,6 @@ export function renderProblem(node, problem){
     if("variable" in problem.constraints[0]){
         yCount = problem.constraints.filter(x => x.variable.includes("y")).length;
     }
-    console.log(yCount)
-
     let func;
     if("function" in problem){
         func = problem.function

@@ -38,8 +38,6 @@ export function animateBackward(i, s){
 }
 
 export function animateForward(i, s){
-    console.log(s)
-
     iteration = i;
     step = s;
 
