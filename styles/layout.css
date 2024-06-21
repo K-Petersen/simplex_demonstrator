@@ -82,6 +82,21 @@ h2{
     
 }
 
+#communicator{
+    width: 50%;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+#output{
+    width: 100%;
+    margin-top: 40px;
+    font-size: large;
+    text-align: left;
+}
+
 #steps{
     margin-bottom: 80px;
 }

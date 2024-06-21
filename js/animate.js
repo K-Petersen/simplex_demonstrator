@@ -9,6 +9,8 @@ let variableIndexPairing;
 function initHTMLSelectors(mainTable){
     HTMLSelectors.mainTable = mainTable;
 
+    HTMLSelectors.output = document.getElementById("output");
+
     HTMLSelectors.biCol = mainTable.querySelectorAll(".col_bi");
     HTMLSelectors.biaijCol = mainTable.querySelectorAll(".col_biaij");
     HTMLSelectors.biaijData = mainTable.querySelectorAll(".biaij");
@@ -26,6 +28,7 @@ export function initDataForAnimation(si,vip) {
     simplexIterations = si;
     
     initHTMLSelectors(mainTable);
+    setHTML("Starttableau");
 }
 
 export function animateBackward(i, s){
@@ -35,6 +38,7 @@ export function animateBackward(i, s){
 }
 
 export function animateForward(i, s){
+    console.log(s)
 
     iteration = i;
     step = s;
@@ -52,15 +56,23 @@ export function animateForward(i, s){
         case 0:
             renderTable(simplexIterations[iteration], HTMLSelectors.mainTable);
             initHTMLSelectors(document.getElementById("mainTable"));
+            setHTML("Überprüfe das Optimierungspotenzial.");
             break;
         case 1:
             if(iteration < simplexIterations.length - 1){
+                if(isM){
+                    setHTML("Wenn noch negative Werte in der M-Zeile sind, ist die optimale Basislösung noch nicht gefunden.")
+                }else{
+                    setHTML("Wenn noch negative Werte in der F-Zeile sind, ist die optimale Basislösung noch nicht gefunden.");
+                }
                 toggleHighlightRow(true, false, (isM ? HTMLSelectors.mRow : HTMLSelectors.fRow));
             }else{
+                setHTML("Alle Werte in der F-Zeile sind größer oder gleich 0. Die optimale Basislösung ist gefunden. ");
                 toggleHighlightRow(true, true, HTMLSelectors.fRow);
             }
             break;
         case 2:
+            setHTML("Wähle den negativsten Wert aus.")
             toggleHighlightRow(false, false, (isM ? HTMLSelectors.mRow : HTMLSelectors.fRow));
             for(let node of (isM ? HTMLSelectors.mRow : HTMLSelectors.fRow)){
                 if(node.classList.contains("col_" + pivotcolid)){
@@ -69,16 +81,20 @@ export function animateForward(i, s){
             }
             break;
         case 3:
+            setHTML("Das ist deine Pivotspalte");
             togglePivot(true, "col");
             break;
         case 4:
+            setHTML("Als nächstes schau dir die Werte in ber b<sub>i</sub>-Spalte an.");
             toggleHighlightBiRow(true)
             break;
         case 5:
+            setHTML("Teile die Werte in der grünen b<sub>i</sub>-Spalte durch die Werte a<sub>ij</sub>.");
             fillBiaijCol(simplexIterations);
             toggleShowBiaijCol(true)
             break;
         case 6:
+            setHTML("Wähle das niedrigste Ergebnis aus.")
             toggleHighlightBiRow(false)
             for(let node of HTMLSelectors.biaijData){
                 if(node.classList.contains("row_" + pivotrowid)){
@@ -87,22 +103,27 @@ export function animateForward(i, s){
             }
             break;
         case 7:
+            setHTML("Das ist deine Pivotzeile.")
             togglePivot(true, "row");
             toggleShowBiaijCol(false)
             break;
         case 8:
+            setHTML("Das Element, wo sich Pivotspalte und Pivotzeile kreuzen, ist dein Pivotelement.")
             togglePivotElement(true);
             break;
         case 9:
+            setHTML("Diese beiden Variablen werden jetzt miteinander 'getauscht'. Die Variable links verlässt die Basis, die Variable oben betritt die Basis.")
             toggleHighlightVariables(true);
             break;
         case 10:
+            setHTML("Wir schreiben links in die Basis die neue Basisvariable und teilen jedes Element in der Zeile mit unserem rot markierten Pivotelement.")
             toggleHighlightVariables(false);
             swapBase();
             togglePivot(false, "col");
             break;
         case 11:    
             if(isM){
+                let html = "Wenn eine y-Variable die Basis verlässt, können wir diese Variable aus dem Tableau streichen.</br>"
                 for(let x = 0; x < yCol.length; x++){
                     const node = yCol[x];
                     cleanClasses(node);
@@ -113,7 +134,9 @@ export function animateForward(i, s){
                     for(let node of HTMLSelectors.mRow){
                         node.classList.add("blackout")
                     }
+                    html += "Da das die letzte y-Variable war, können wir auch die M-Zeile streichen."
                 }
+                setHTML(html);
             }
 
             break;
@@ -130,10 +153,12 @@ export function animateForward(i, s){
                     }
                 }
             }
+            setHTML("Für mehr Übersicht, löschen wir die Elemente ganz aus dem Tableau.");
             break;
 
 
         case 13:
+            setHTML("So erhalten wir die Tabelle für unsere nächste, verbesserte Basislösung. Die roten Zeilen sind jedoch noch falsch und müssen neu berechnet werden.")
             fillRow(pivotrowid, simplexIterations[iteration + 1].newTable.constraints[pivotrowid]);
             [...HTMLSelectors.mainTable.querySelector("#row_" + pivotrowid).children].forEach((node) => {
                 cleanClasses(node);
@@ -144,12 +169,18 @@ export function animateForward(i, s){
             break;
 
         case 14:
+            setHTML("Ziel ist dass der grün markierte Vektor zu einem Einheitsvektor wird.</br></br> Dafür muss für jede rote Zeile folgende Operation durchgeführt werden: </br>Die weiße Zeile wird mit dem grün markierten Wert der jeweiligen Zeile multipliziert und dann von der jeweiligen Zeile abgezogen.")
             toggleHighlightCol(true, false, HTMLSelectors.mainTable.querySelectorAll(".col_" + pivotcolid));
             break;
         case 15:
+            setHTML("So erhalten wir die nächste Basislösung und fangen wieder von vorne an.")
             renderTable(simplexIterations[iteration + 1], HTMLSelectors.mainTable);
             break;
     }
+}
+
+function setHTML(html){
+    HTMLSelectors.output.innerHTML = html;
 }
 
 function toggleHighlightRow(show, highlightAll, nodeList) {
@@ -166,7 +197,7 @@ function toggleHighlightRow(show, highlightAll, nodeList) {
 
 function toggleHighlightCol(show, highlightAll, nodeList) {
     for(let node of nodeList){
-        if(highlightAll || (!node.classList.contains("row_head") && !node.classList.contains("row_" + simplexIterations[iteration].pivot.row))){
+        if(highlightAll || (!node.classList.contains("row_head"))){
             if(show){
                 node.classList.add("highlight");
             }else{
