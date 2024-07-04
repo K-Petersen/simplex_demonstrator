@@ -233,7 +233,7 @@ function togglePivot(show, selector){
 function fillBiaijCol(){
     for(const [i, node] of Object.entries([...HTMLSelectors.biaijData])){
         const constraint = simplexIterations[iteration].newTable.constraints[i];
-        node.innerText = constraint.restriction + "/" + constraint.values[simplexIterations[iteration].pivot.col] + " = " + simplexIterations[iteration].biaijs[i]
+        node.innerText = roundToTwoDigits(constraint.restriction) + "/" + roundToTwoDigits(constraint.values[simplexIterations[iteration].pivot.col]) + " = " + roundToTwoDigits(simplexIterations[iteration].biaijs[i])
 
     }
 }
