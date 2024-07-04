@@ -131,6 +131,7 @@ export function renderProblem(node, problemID, transformed){
 
     //FUNCTION
     const functionNode = document.createElement("span");
+    functionNode.classList.add("problemFunction");
     let functionInnerHTML = "";
     for(var x = 0; x < func.values.length; x ++){
         if(func.values[x] === 0) continue;
@@ -143,6 +144,12 @@ export function renderProblem(node, problemID, transformed){
     functionNode.innerHTML = ( "type" in func ? capitalizeFirstLetter(func.type) : "Max") + " " + (plainProblem.function.type === "min" && transformed ? "G" : "F") + "(x) = " + functionInnerHTML;
     node.appendChild(functionNode)
 
+
+    //u.d.NB:
+    const udnb = document.createElement("span");
+    udnb.classList.add("udnb");
+    udnb.innerText = "u.d.NB:"
+    node.appendChild(udnb);
 
     //CONSTRAINTS
     for(var x = 0; x < problem.constraints.length; x++){
