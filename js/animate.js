@@ -238,18 +238,33 @@ export function animateForward(i, s){
                     output += "</br></br>";
                 }
                 output += "Der Optimalwert deines " + (isMax ? "Maximierungs" : "Minimierungs") + "problems ist: " + (isMax ? table.newTable.fRow.F : table.newTable.fRow.F * -1) + "</br>";
-                const lv = getLV(isMax); 
-                output += "Der Lösungsvektor dafür ist: " + lv;
+                output += "Der Lösungsvektor dafür ist x*=" + getLVx(isMax);
+                if(("mRow" in simplexIterations[0].newTable)) output += "</br>Der Y-Lösungsvektor dafür ist y*=" + getLVy();
                 setHTML(output);
 
                 toggleHighlightRow(true, true, HTMLSelectors.fRow);
 
-                function getLV(isMax){
-                    const vals = table.newTable.fRow.values;
-                    let lv = "";
-                    lv += "(";
-                    for(let x = 0; x < vals.length; x++){
-                        lv += roundToTwoDigits((isMax ? vals[x] : vals[x] * -1)) + ( x < vals.length - 1 ? ", " : ")")
+                function getLVx(isMax){
+                    const cons = table.newTable.constraints;
+                    const solutionLength = simplexIterations[simplexIterations.length - 1].newTable.constraints[0].values.length;
+
+                    let lv = "(";
+                    for(let x = 0; x < solutionLength; x++){
+                        let val = 0;
+                        for(let y = 0; y < cons.length; y++){
+                            console.log(cons[y])
+                            if(x == cons[y].variable.split("")[1] - 1) val = cons[y].restriction;
+                        }
+                        lv += roundToTwoDigits((isMax ? val : val * -1)) + ( x < solutionLength - 1 ? ", " : ")")
+                    }
+                    return lv;
+                }
+
+                function getLVy(){
+                    const solutionLength = Object.keys(variableIndexPairing).length;
+                    let lv = "(";
+                    for(let y = 0; y < solutionLength; y++){
+                        lv += "0" + ( y < solutionLength - 1 ? ", " : ")")
                     }
                     return lv;
                 }
