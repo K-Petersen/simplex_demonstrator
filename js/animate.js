@@ -31,8 +31,6 @@ export function initDataForAnimation(si, vip, op) {
 }
 
 export function animateBackward(i, s){
-    console.log(variableIndexPairing)
-    
     iteration = i;
     step = s;
 
@@ -201,19 +199,6 @@ export function animateBackward(i, s){
             break;
         case 15:
             setHTML("So erhältst du die nächste Basislösung und kannst mit dieser von vorne anfangen.")
-
-            // renderTable(simplexIterations[iteration], mainTable);
-            // if(isM){
-            //     for(let x = 0; x < yCol.length; x++){
-            //         const node = yCol[x];
-            //         node.classList.add("displayNone");
-            //     }
-            //     if(!("mRow" in simplexIterations[iteration].newTable)){
-            //         for(let node of HTMLSelectors.mRow){
-            //             node.classList.add("displayNone")
-            //         }
-            //     }
-            // }
             break;
     }
 
