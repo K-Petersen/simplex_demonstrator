@@ -149,7 +149,7 @@ export function renderProblem(node, problemID, transformed){
         if(func.values[x] === 0) continue;
 
         const values = func.values;
-        const sign = (values[x] === Math.abs(values[x]) ? "+" : "-");
+        const sign = (values[x] === Math.abs(values[x]) ? "+" : "&minus;");
         const val = func.values[x];
         functionInnerHTML += (x > 0 ? " " + sign + " " + Math.abs(val) : val) + "x" + "<sub>" + (x + 1) + "</sub>"
     }
@@ -175,17 +175,25 @@ export function renderProblem(node, problemID, transformed){
         let valuesGreaterThanZero = 0;
         for(var y = 0; y < values.length; y++){
             if(values[y] === 0){
-                constraintInnerHTML += "<span></span>";
+                if (y > 0) constraintInnerHTML += "<span class='sign'></span>";
+                constraintInnerHTML += "<span class='variable'></span>";
                 continue;
             }else{
                 valuesGreaterThanZero++;
             }
-            const sign = (valuesGreaterThanZero > 1 && y > 0 ? (values[y] === Math.abs(values[y]) ? "+" : "-") : "");
-            const val = (y > 0 ? " " + sign + " " + (Math.abs(values[y]) === 1 ? "" : values[y]) : (Math.abs(values[y]) === 1 ? (sign === "+" ? "" : values[y]) : values[y]))
-            constraintInnerHTML += "<span>" + val + ( !(yCount > 0 && y + 1 > (func.values.length - yCount)) ? "x" + "<sub>" + (y + 1) + "</sub>": "y" + "<sub>" + (y + 1 - (func.values.length - yCount)) + "</sub>") + "</span>";
+            const sign = (valuesGreaterThanZero > 1 && y > 0 ? (values[x] === Math.abs(values[y]) ? "+" : "&minus;") : "");
+            let val = values[y];
+            if( Math.abs(values[y]) === 1 ){
+                val = "";
+            }else if(x > 0){
+                val = Math.abs(values[y])
+            }
+
+            if (y > 0) constraintInnerHTML += "<span class='sign'>" + sign +"</span>";
+            constraintInnerHTML += "<span class='variable'>" + val + ( !(yCount > 0 && y + 1 > (func.values.length - yCount)) ? "x" + "<sub>" + (y + 1) + "</sub>": "y" + "<sub>" + (y + 1 - (func.values.length - yCount)) + "</sub>") + "</span>";
         }
         const sign = (constraint.restriction.type === "lessthan" ? "&le;" : (constraint.restriction.type === "greaterthan" ? "&ge;" : "="))
-        const val = "<span>" + sign + "</span> <span>" + (constraint.restriction === Number(constraint.restriction) ? constraint.restriction : constraint.restriction.value) + "</span>"
+        const val = "<span class='sign'>" + sign + "</span> <span class='restriction'>" + (constraint.restriction === Number(constraint.restriction) ? constraint.restriction : constraint.restriction.value) + "</span>"
         constraintNode.innerHTML = constraintInnerHTML + val;
 
         node.appendChild(constraintNode);
@@ -193,12 +201,12 @@ export function renderProblem(node, problemID, transformed){
 
     //>=0 CONSTRAINT
     const constraintNode = document.createElement("span");
-    constraintNode.classList.add("constraint")
+    constraintNode.classList.add("constraint", "zeroConstraint")
     let constraintInnerHTML = "";
     for(var x = 0; x < func.values.length; x++){
-        constraintInnerHTML += "<span>" + ( !(yCount > 0 && x + 1 > (func.values.length - yCount)) ? "x" + "<sub>" + (x + 1) + "</sub>": "y" + "<sub>" + (x + 1 - (func.values.length - yCount)) + "</sub>") + (x + 1 < func.values.length ? "," : "") + "</span>";
+        constraintInnerHTML += "<span>" + ( !(yCount > 0 && x + 1 > (func.values.length - yCount)) ? "x" + "<sub>" + (x + 1) + "</sub>": "y" + "<sub>" + (x + 1 - (func.values.length - yCount)) + "</sub>") + (x + 1 < func.values.length ? ",&nbsp;" : "") + "</span>";
     }
-    constraintInnerHTML += "<span>&ge;</span> <span>0</span>";
+    constraintInnerHTML += "<span class='sign'>&ge;</span> <span class='restriction'>0</span>";
     constraintNode.innerHTML = constraintInnerHTML;
     node.appendChild(constraintNode)
 }
