@@ -28,7 +28,7 @@ export function initDataForAnimation(si,vip) {
     simplexIterations = si;
     
     initHTMLSelectors(mainTable);
-    setHTML("Starttableau");
+    setHTML("Das ist das Starttableau.");
 }
 
 export function animateBackward(i, s){
@@ -54,7 +54,7 @@ export function animateForward(i, s){
         case 0:
             renderTable(simplexIterations[iteration], HTMLSelectors.mainTable);
             initHTMLSelectors(document.getElementById("mainTable"));
-            setHTML("Überprüfe das Optimierungspotenzial.");
+            setHTML("Überprüfe zunächst das Optimierungspotenzial.");
             break;
         case 1:
             if(iteration < simplexIterations.length - 1){
@@ -79,15 +79,15 @@ export function animateForward(i, s){
             }
             break;
         case 3:
-            setHTML("Das ist deine Pivotspalte");
+            setHTML("Das ist deine Pivotspalte.");
             togglePivot(true, "col");
             break;
         case 4:
-            setHTML("Als nächstes schau dir die Werte in ber b<sub>i</sub>-Spalte an.");
+            setHTML("Als nächstes schau dir die Werte in der b<sub>i</sub>-Spalte an.");
             toggleHighlightBiRow(true)
             break;
         case 5:
-            setHTML("Teile die Werte in der grünen b<sub>i</sub>-Spalte durch die Werte a<sub>ij</sub>.");
+            setHTML("Teile die Werte in der grünen b<sub>i</sub>-Spalte durch die Werte a<sub>ij</sub> der Pivotspalte.");
             fillBiaijCol(simplexIterations);
             toggleShowBiaijCol(true)
             break;
@@ -114,14 +114,14 @@ export function animateForward(i, s){
             toggleHighlightVariables(true);
             break;
         case 10:
-            setHTML("Wir schreiben links in die Basis die neue Basisvariable und teilen jedes Element in der Zeile mit unserem rot markierten Pivotelement.")
+            setHTML("Die neue Basisvariable wird links in die Basis geschrieben und jedes Element in der Zeile wird durch das rot markierte Pivotelement geteilt.")
             toggleHighlightVariables(false);
             swapBase();
             togglePivot(false, "col");
             break;
         case 11:    
             if(isM){
-                let html = "Wenn eine y-Variable die Basis verlässt, können wir diese Variable aus dem Tableau streichen.</br>"
+                let html = "Wenn eine y-Variable die Basis verlässt, kannst du diese Variable aus dem Tableau streichen.</br>"
                 for(let x = 0; x < yCol.length; x++){
                     const node = yCol[x];
                     cleanClasses(node);
@@ -132,7 +132,7 @@ export function animateForward(i, s){
                     for(let node of HTMLSelectors.mRow){
                         node.classList.add("blackout")
                     }
-                    html += "Da das die letzte y-Variable war, können wir auch die M-Zeile streichen."
+                    html += "Da das die letzte y-Variable war, kann auch die M-Zeile gestrichen werden."
                 }
                 setHTML(html);
             }
@@ -151,12 +151,12 @@ export function animateForward(i, s){
                     }
                 }
             }
-            setHTML("Für mehr Übersicht, löschen wir die Elemente ganz aus dem Tableau.");
+            setHTML("Für mehr Übersicht werden die Elemente ganz aus dem Tableau gelöscht.");
             break;
 
 
         case 13:
-            setHTML("So erhalten wir die Tabelle für unsere nächste, verbesserte Basislösung. Die roten Zeilen sind jedoch noch falsch und müssen neu berechnet werden.")
+            setHTML("So erhältst du die Tabelle für die nächste, verbesserte Basislösung. Die roten Zeilen sind jedoch noch falsch und müssen neu berechnet werden.")
             fillRow(pivotrowid, simplexIterations[iteration + 1].newTable.constraints[pivotrowid]);
             [...HTMLSelectors.mainTable.querySelector("#row_" + pivotrowid).children].forEach((node) => {
                 cleanClasses(node);
@@ -167,11 +167,11 @@ export function animateForward(i, s){
             break;
 
         case 14:
-            setHTML("Ziel ist dass der grün markierte Vektor zu einem Einheitsvektor wird.</br></br> Dafür muss für jede rote Zeile folgende Operation durchgeführt werden: </br>Die weiße Zeile wird mit dem grün markierten Wert der jeweiligen Zeile multipliziert und dann von der jeweiligen Zeile abgezogen.")
+            setHTML("Das Ziel ist, dass der grün markierte Vektor zu einem Einheitsvektor wird.</br></br> Dafür muss für jede rote Zeile folgende Operation durchgeführt werden: </br>Die weiße Zeile wird mit dem grün markierten Wert der jeweiligen Zeile multipliziert und dann von der jeweiligen Zeile abgezogen.")
             toggleHighlightCol(true, false, HTMLSelectors.mainTable.querySelectorAll(".col_" + pivotcolid));
             break;
         case 15:
-            setHTML("So erhalten wir die nächste Basislösung und fangen wieder von vorne an.")
+            setHTML("So erhältst du die nächste Basislösung und kannst mit dieser von vorne anfangen.")
             renderTable(simplexIterations[iteration + 1], HTMLSelectors.mainTable);
             break;
     }
