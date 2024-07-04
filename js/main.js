@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("showSteps").addEventListener("click", () => handleShow(stepsContainer));
     document.getElementById("showSolution").addEventListener("click", () => handleShow(solutionContainer));
     document.getElementById("showTransformedProblem").addEventListener("click", handleShowTransformedProblem);
-    // document.getElementById("previousStep").addEventListener("click", () => handleAnimation(0))
+    document.getElementById("previousStep").addEventListener("click", () => handleAnimation(0))
     document.getElementById("nextStep").addEventListener("click", () => handleAnimation(1))
     
 });
@@ -79,15 +79,15 @@ function handleChangeDropdown(e){
 
 function handleAnimation(direction){
     const STEP_MAX = 15;
-    if(iteration < simplexIterations.length - 1 || step < 1){
-        if(direction === 1){
+    if(direction === 1){
+        if(iteration < simplexIterations.length - 1 || step < 1){
             if(step === STEP_MAX && iteration < simplexIterations.length){
                 step = 0;
                 iteration++;
             }else{
                     step++;
                     if(step === 11 && !("mRow" in simplexIterations[iteration].newTable)){
-                        step+= 2;
+                        step += 2;
                     }
                 }
             animateForward(iteration, step);
@@ -101,6 +101,9 @@ function handleAnimation(direction){
             }
         }else{
             step--;
+            if(step === 12 && !("mRow" in simplexIterations[iteration].newTable)){
+                step -= 2;
+            }
         }
         animateBackward(iteration, step);
 
