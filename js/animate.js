@@ -2,6 +2,7 @@ import { renderTable } from "./render.js";
 import { roundToTwoDigits } from "./utils.js";
 let HTMLSelectors = {};
 let simplexIterations;
+let originalProblem;
 let iteration;
 let step;
 let variableIndexPairing;
@@ -20,12 +21,12 @@ function initHTMLSelectors(mainTable){
     HTMLSelectors.mRow = mainTable.querySelectorAll(".row_M");
 }
 
-export function initDataForAnimation(si,vip) {
+export function initDataForAnimation(si, vip, op) {
     const mainTable = document.getElementById("mainTable");
 
-    
-    variableIndexPairing = vip
     simplexIterations = si;
+    variableIndexPairing = vip;
+    originalProblem = op;
     
     initHTMLSelectors(mainTable);
     setHTML("Das ist das Starttableau.");
@@ -65,8 +66,28 @@ export function animateForward(i, s){
                 }
                 toggleHighlightRow(true, false, (isM ? HTMLSelectors.mRow : HTMLSelectors.fRow));
             }else{
-                setHTML("Alle Werte in der F-Zeile sind größer oder gleich 0. Die optimale Basislösung ist gefunden. ");
+                const isMax = originalProblem.function.type === "max";
+                let output = "Alle Werte in der F-Zeile sind größer oder gleich 0. Die optimale Basislösung ist gefunden. </br></br>"
+                if(!isMax){ //Wenn Min zu Max wurde
+                    output += "Die hier gefundene Lösung entspricht aber der Optimallösung für das transformierte Maximal-Problem. Das Originalproblem war aber eine Minimierungsproblem. Daher musst du die F-Zeile mit -1 multiplizieren, sodass du die Optimallösung des Ausgangsproblems erhältst.";
+                    output += "</br></br>";
+                }
+                output += "Der Optimalwert deines " + (isMax ? "Maximierungs" : "Minimierungs") + "problems ist: " + (isMax ? table.newTable.fRow.F : table.newTable.fRow.F * -1) + "</br>";
+                const lv = getLV(isMax); 
+                output += "Der Lösungsvektor dafür ist: " + lv;
+                setHTML(output);
+
                 toggleHighlightRow(true, true, HTMLSelectors.fRow);
+
+                function getLV(isMax){
+                    const vals = table.newTable.fRow.values;
+                    let lv = "";
+                    lv += "(";
+                    for(let x = 0; x < vals.length; x++){
+                        lv += roundToTwoDigits((isMax ? vals[x] : vals[x] * -1)) + ( x < vals.length - 1 ? ", " : ")")
+                    }
+                    return lv;
+                }
             }
             break;
         case 2:

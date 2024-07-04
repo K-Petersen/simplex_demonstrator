@@ -1,5 +1,5 @@
 import { clearIterations, setVariableIndexPairing, solve } from "./solver.js";
-import { formatProblem, fillProblemDropdown } from "./generator.js";
+import { formatProblem, fillProblemDropdown, returnPlainProblem } from "./generator.js";
 import { renderEndTable, renderHistory } from "./history.js";
 import { getVariableToCssClassPairing, renderProblem, renderTable } from "./render.js";
 import { animateBackward, animateForward, initDataForAnimation } from "./animate.js";
@@ -32,7 +32,7 @@ function init(id){
     step = 0; 
     iteration = 0;
     
-    const simplextable = formatProblem(id)
+    const simplextable = formatProblem(id);
     const yCount = simplextable.constraints.filter(x => x.variable.includes("y")).length;
     const vip = getVariableToCssClassPairing(simplextable.constraints[0].values.length - yCount, yCount );
     setVariableIndexPairing(getVariableToCssClassPairing(simplextable.constraints[0].values.length - yCount, yCount ))
@@ -40,7 +40,7 @@ function init(id){
 
 
     initSimplexTables(simplexIterations);
-    initDataForAnimation(simplexIterations, vip);
+    initDataForAnimation(simplexIterations, vip, returnPlainProblem(id));
     
 
     const problemUntransformed = document.getElementById("problemUntransformed");
