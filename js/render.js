@@ -191,53 +191,10 @@ export function renderProblem(node, problemID, transformed){
     node.appendChild(constraintNode)
 }
 
-export function fillRow(constraint, htmlNode){
-    for( let node of htmlNode.children){
-        const classList = [...node.classList];
-        if (classList.includes("col_bv")){
-            node.innerHTML = constraint.variable
-        } else if (classList.includes("col_bi")){
-            node.innerHTML = roundToTwoDigits(constraint.restriction);
-        } else if (classList.includes("col_var")){
-            const colId = classList.filter(className => className.includes("col") && className !== "col_var")[0].split("_")[1];
-            node.innerHTML = roundToTwoDigits(constraint.values[colId])
-            
-        }
-    }
-}
-
-export function fillZRow(zRow, htmlNode, z){    
-    for( let node of htmlNode.children){
-        if (node.classList.contains("col_bi")){
-            node.innerHTML = z === "f" ? zRow.F : zRow.M;
-        } else if (node.classList.contains("col_var")){
-            const classList = [...node.classList];
-            const colId = classList.filter(className => className.includes("col") && className !== "col_var")[0].split("_")[1];
-            node.innerHTML = roundToTwoDigits(zRow.values[colId])
-            
-        }
-    }
-}
-
-export function fillBiaijCol(biaijs, biaijColHTML){
-    for( let node of biaijColHTML){
-        const classList = [...node.classList];
-        const rowid = classList.filter(className => className.includes("row"))[0].split("_")[1];       
-        node.innerHTML = biaijs[rowid] !== Infinity ? roundToTwoDigits(biaijs[rowid]) : ""
-    }
-}
  export function getVariableToCssClassPairing(valuesCount, yCount){
     let variableSelectorPairs = {};
      for(var y = 0; y < yCount; y++){
         variableSelectorPairs["y" + (y + 1)] = valuesCount + y;
     }
     return variableSelectorPairs;
- }
-
- export function hideYColumn(id){
-    [...document.getElementById("simplexTableau").querySelectorAll(".col_" + id)].forEach(x => x.classList.add("displayNone"))
- }
-
- export function hideMRow(){
-    document.getElementById("mRow").classList.add("displayNone")
  }
