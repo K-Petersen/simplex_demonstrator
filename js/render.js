@@ -1,3 +1,4 @@
+import { returnPlainProblem, formatProblem } from "./generator.js";
 import { capitalizeFirstLetter, invertArrayEntries, roundToTwoDigits } from "./utils.js";
 
 
@@ -109,9 +110,11 @@ function createRow(values, biValue, biaijValue, rowId, index = -1){
     return row;
 }
 
-export function renderProblem(node, problem){
+export function renderProblem(node, problemID, transformed){
 
     node.replaceChildren()
+    const plainProblem = returnPlainProblem(problemID);
+    const problem = (transformed ? formatProblem(problemID) : returnPlainProblem(problemID));
 
     let yCount = 0;
     if("variable" in problem.constraints[0]){
@@ -137,7 +140,7 @@ export function renderProblem(node, problem){
         const val = func.values[x];
         functionInnerHTML += (x > 0 ? " " + sign + " " + Math.abs(val) : val) + "x" + "<sub>" + (x + 1) + "</sub>"
     }
-    functionNode.innerHTML = ( "type" in func ? capitalizeFirstLetter(func.type) : "Max") + " F(x) = " + functionInnerHTML;
+    functionNode.innerHTML = ( "type" in func ? capitalizeFirstLetter(func.type) : "Max") + " " + (plainProblem.function.type === "min" && transformed ? "G" : "F") + "(x) = " + functionInnerHTML;
     node.appendChild(functionNode)
 
 

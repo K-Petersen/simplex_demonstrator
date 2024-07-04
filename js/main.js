@@ -1,5 +1,5 @@
 import { clearIterations, setVariableIndexPairing, solve } from "./solver.js";
-import { formatProblem, fillProblemDropdown, returnPlainProblem } from "./generator.js";
+import { formatProblem, fillProblemDropdown } from "./generator.js";
 import { renderEndTable, renderHistory } from "./history.js";
 import { getVariableToCssClassPairing, renderProblem, renderTable } from "./render.js";
 import { animateBackward, animateForward, initDataForAnimation } from "./animate.js";
@@ -44,10 +44,10 @@ function init(id){
     
 
     const problemUntransformed = document.getElementById("problemUntransformed");
-    renderProblem(problemUntransformed, returnPlainProblem(id));
+    renderProblem(problemUntransformed, id, false);
 
     const problemTransformed = document.getElementById("problemTransformed");
-    renderProblem(problemTransformed, formatProblem(id));
+    renderProblem(problemTransformed, id, true);
 }
 
 function initSimplexTables(simplexIterations){
