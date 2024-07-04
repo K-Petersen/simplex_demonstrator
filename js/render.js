@@ -25,8 +25,17 @@ export function renderSimplexTable(simplexIterationObject){
     rows.push(createTableHeader(valuesCount, yCount));
     for(let x = 0; x < constraintCount; x++){
         const constraint = table.constraints[x];
-        const biaijVal = ("biaijs" in simplexIterationObject ?  constraint.restriction + " / " +constraint.values[simplexIterationObject.pivot.col] + " = " + roundToTwoDigits(simplexIterationObject.biaijs[x]) : "")
-        rows.push(createRow(constraint.values, constraint.restriction, biaijVal, constraint.variable, x));
+        let biaijVal;
+        if("biaijs" in simplexIterationObject){
+            if(simplexIterationObject.biaijs[x] == Infinity){
+                biaijVal = "-";
+            }else{
+                biaijVal = roundToTwoDigits(constraint.restriction) + " / " + roundToTwoDigits(constraint.values[simplexIterationObject.pivot.col]) + " = " + roundToTwoDigits(simplexIterationObject.biaijs[x])
+            }
+        }else{
+            biaijVal = "";
+        }
+        rows.push(createRow(constraint.values, roundToTwoDigits(constraint.restriction), roundToTwoDigits(biaijVal), constraint.variable, x));
     }
     rows.push(createRow(table.fRow.values, table.fRow.F, "", "F"))
     if("mRow" in table){
@@ -103,6 +112,9 @@ function createRow(values, biValue, biaijValue, rowId, index = -1){
 
     const biaij = document.createElement("div");
     biaij.innerText = biaijValue;
+    if(biaijValue == "-"){
+        biaij.title = "Restriktionswerte die durch 0 oder einen negativen Wert geteilt würden, werden bei der Pivotzeilenwahl nicht berücksichtigt."
+    }
     biaij.classList.add(rowClass, "col_biaij", "hidden");
     if(rowId.includes("x") || rowId.includes("y")) biaij.classList.add("biaij");
     row.appendChild(biaij);

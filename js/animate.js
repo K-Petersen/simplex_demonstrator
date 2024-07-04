@@ -233,7 +233,12 @@ function togglePivot(show, selector){
 function fillBiaijCol(){
     for(const [i, node] of Object.entries([...HTMLSelectors.biaijData])){
         const constraint = simplexIterations[iteration].newTable.constraints[i];
-        node.innerText = roundToTwoDigits(constraint.restriction) + "/" + roundToTwoDigits(constraint.values[simplexIterations[iteration].pivot.col]) + " = " + roundToTwoDigits(simplexIterations[iteration].biaijs[i])
+        if(simplexIterations[iteration].biaijs[i] == Infinity){
+            node.innerText = "-"
+            node.title = "Restriktionswerte die durch 0 oder einen negativen Wert geteilt würden, werden bei der Pivotzeilenwahl nicht berücksichtigt."
+        } else{
+            node.innerText = roundToTwoDigits(constraint.restriction) + "/" + roundToTwoDigits(constraint.values[simplexIterations[iteration].pivot.col]) + " = " + roundToTwoDigits(simplexIterations[iteration].biaijs[i])
+        }
 
     }
 }
