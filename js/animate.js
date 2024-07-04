@@ -252,7 +252,6 @@ export function animateForward(i, s){
                     for(let x = 0; x < solutionLength; x++){
                         let val = 0;
                         for(let y = 0; y < cons.length; y++){
-                            console.log(cons[y])
                             if(x == cons[y].variable.split("")[1] - 1) val = cons[y].restriction;
                         }
                         lv += roundToTwoDigits((isMax ? val : val * -1)) + ( x < solutionLength - 1 ? ", " : ")")
