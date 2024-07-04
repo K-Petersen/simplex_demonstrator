@@ -160,12 +160,15 @@ export function renderProblem(node, problemID, transformed){
         let constraintInnerHTML = "";
 
         const values = constraint.values;
+        let valuesGreaterThanZero = 0;
         for(var y = 0; y < values.length; y++){
             if(values[y] === 0){
                 constraintInnerHTML += "<span></span>";
                 continue;
-            } 
-            const sign = (values[y] === Math.abs(values[y]) ? "+" : "-");
+            }else{
+                valuesGreaterThanZero++;
+            }
+            const sign = (valuesGreaterThanZero > 1 && y > 0 ? (values[y] === Math.abs(values[y]) ? "+" : "-") : "");
             const val = (y > 0 ? " " + sign + " " + (Math.abs(values[y]) === 1 ? "" : values[y]) : (Math.abs(values[y]) === 1 ? (sign === "+" ? "" : values[y]) : values[y]))
             constraintInnerHTML += "<span>" + val + ( !(yCount > 0 && y + 1 > (func.values.length - yCount)) ? "x" + "<sub>" + (y + 1) + "</sub>": "y" + "<sub>" + (y + 1 - (func.values.length - yCount)) + "</sub>") + "</span>";
         }
