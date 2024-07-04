@@ -156,7 +156,7 @@ export const problems = [
                     }
                 },
                 {
-                    values:[3,1],
+                    values:[1,3],
                     restriction:{
                         type:"lessthan",
                         value:15,
