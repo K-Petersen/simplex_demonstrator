@@ -113,6 +113,7 @@ function createRow(values, biValue, biaijValue, rowId, index = -1){
     const biaij = document.createElement("div");
     biaij.innerText = biaijValue;
     if(biaijValue == "-"){
+        biaij.classList.add("tooltip");
         biaij.title = "Restriktionswerte die durch 0 oder einen negativen Wert geteilt würden, werden bei der Pivotzeilenwahl nicht berücksichtigt."
     }
     biaij.classList.add(rowClass, "col_biaij", "hidden");
@@ -145,16 +146,79 @@ export function renderProblem(node, problemID, transformed){
     const functionNode = document.createElement("span");
     functionNode.classList.add("problemFunction");
     let functionInnerHTML = "";
+    let zeroValues = "";
+    let mTerms = "";
     for(var x = 0; x < func.values.length; x ++){
-        if(func.values[x] === 0) continue;
+        if(func.values[x] === 0){
+            if(x < func.values.length - yCount){
+                zeroValues += (zeroValues === "" ? "" : " + ");
+                zeroValues += "x" + "<sub>" + (x + 1) + "</sub>";
+            }else{
+                const id = x - (func.values.length - yCount) + 1
+                mTerms += " &minus; My<sub>" + id + "</sub>" 
+            }
+            continue;
+        }
 
         const values = func.values;
         const sign = (values[x] === Math.abs(values[x]) ? "+" : "&minus;");
-        const val = func.values[x];
-        functionInnerHTML += (x > 0 ? " " + sign + " " + Math.abs(val) : val) + "x" + "<sub>" + (x + 1) + "</sub>"
+        let val = values[x];
+        if( Math.abs(values[x]) === 1 ){
+            val = "";
+        }else if(x > 0){
+            val = Math.abs(values[x])
+        }
+
+        functionInnerHTML += (x > 0 || sign !== "+" ? " " + sign + " " : "") + val + "x" + "<sub>" + (x + 1) + "</sub>"
     }
-    functionNode.innerHTML = ( "type" in func ? capitalizeFirstLetter(func.type) : "Max") + " " + (plainProblem.function.type === "min" && transformed ? "G" : "F") + "(x) = " + functionInnerHTML;
+    zeroValues = zeroValues === "" ? "" : " + 0&times;(" + zeroValues + ")";
+    functionNode.innerHTML = ( "type" in func ? capitalizeFirstLetter(func.type) : "Max") + " " + (plainProblem.function.type === "min" && transformed ? "G" : "F") + "(x) = " + functionInnerHTML + zeroValues + mTerms;
     node.appendChild(functionNode)
+
+    //FUNCTION TRANSFORMED
+    if(transformed && "mRow" in problem){
+        const downArrows = document.createElement("span");
+        downArrows.classList.add("downArrows")
+        downArrows.innerHTML = "&#11015;&#11015;&#11015;&#11015;&#11015;";
+        node.appendChild(downArrows);
+
+        const functionTransformedNode = document.createElement("span");
+        functionTransformedNode.classList.add("problemFunction", "tooltip");
+        functionTransformedNode.title = "Hier steht eine zweite Funktion, da die Obere zum weiteren Vorgehen in diese Form transformiert werden muss. Um die M-Zeile zu erhalten, muss man diese Funktion hier nur nach demjenigen M-Wert umstellen, der keine zugehörige Variable hat.";
+
+        functionTransformedNode.innerHTML = "Max " + (plainProblem.function.type === "min" && transformed ? "G" : "F") + "(x) = " + transformFunction(problem)
+        
+        function transformFunction(problem){
+            const mRow = invertArrayEntries(problem.mRow.values);
+            const fRow = invertArrayEntries(problem.fRow.values);
+            let functionTransformed = "";
+            for(let x = 0; x < mRow.length - yCount; x++){
+                const mRowSign = mRow[x] === Math.abs(mRow[x]) ? "+" : "&minus;";
+                const fRowSign = fRow[x] === Math.abs(fRow[x]) ? "+" : "&minus;";
+                const variable = "x" + "<sub>" + (x + 1) + "</sub>";
+                if(mRow[x] !== 0){
+                    if(fRow[x] !== 0){
+                        if(functionTransformed !== "") functionTransformed += " + ";
+                        functionTransformed += "(" + (mRowSign !== "+" ? " " + mRowSign : "" ) + Math.abs(mRow[x]) + "M" + " " + fRowSign + " " + Math.abs(fRow[x]) + ")";
+                        functionTransformed += "&times;" + variable;
+                    }else{
+                        functionTransformed += (functionTransformed !== "" ? " " + mRowSign : "") + " " +(Math.abs(mRow[x]) !== 1 ? Math.abs(mRow[x]) : "") + "M" + variable; 
+                    }
+                }else if(fRow[x] !== 0){
+                    functionTransformed += (functionTransformed === "" && " " + fRowSign === "+" ? "" : fRowSign) + " " + (Math.abs(fRow[x]) !== 1 ? Math.abs(fRow[x]) : "") + variable; 
+                }
+            }
+
+            const M = problem.mRow.M;
+            const sign = M === Math.abs(M) ? "+" : "&minus;";
+            functionTransformed += " " + sign + " " + Math.abs(M) + "M";
+            
+            return functionTransformed;
+        }
+
+
+        node.appendChild(functionTransformedNode)
+    }
 
 
     //u.d.NB:
@@ -181,7 +245,7 @@ export function renderProblem(node, problemID, transformed){
             }else{
                 valuesGreaterThanZero++;
             }
-            const sign = (valuesGreaterThanZero > 1 && y > 0 ? (values[x] === Math.abs(values[y]) ? "+" : "&minus;") : "");
+            const sign = (valuesGreaterThanZero > 1 && y > 0 ? (values[y] === Math.abs(values[y]) ? "+" : "&minus;") : "");
             let val = values[y];
             if( Math.abs(values[y]) === 1 ){
                 val = "";
