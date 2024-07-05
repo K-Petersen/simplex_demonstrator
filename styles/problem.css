@@ -1,0 +1,46 @@
+#problem{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+ 
+    padding-bottom: 80px;
+    border-bottom: 2px dashed black;
+    margin-bottom: 80px;
+}
+.problemFunction{
+    font-size: larger;
+    align-self: flex-start;
+}
+.problem{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.udnb{
+    width: 100%;
+    margin: 10px 0px;
+}
+
+.constraint{
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    margin: 3px 0px;
+}
+
+.constraint > .variable{
+    width: 40px;
+    text-align: right;
+}
+.constraint > .sign {
+    width: 25px;
+    text-align: center;
+}
+.constraint > .restriction{
+    width: 50px;
+    text-align: right;
+}
+.zeroConstraint {
+    justify-content: flex-end;
+}
