@@ -171,5 +171,128 @@ export const problems = [
                 },
             ]
         }
+    },
+    {
+        title: "Thesis Beispiel: Standard",
+        problem: {
+            fRow:{
+                F: 0,
+                values: []
+            },
+            function:{
+                type: "max",
+                values: [2,5]
+            },
+            constraints:[
+                {
+                    values:[1,4],
+                    restriction:{
+                        type:"lessthan",
+                        value:24,
+                    }
+                },
+                {
+                    values:[-1,-1],
+                    restriction:{
+                        type:"greaterthan",
+                        value:-12,
+                    }
+                },
+            ]
+        }
+    },
+    {
+        title: "Thesis Beispiel: Primale Degeneration",
+        problem: {
+            fRow:{
+                F: 0,
+                values: []
+            },
+            function:{
+                type: "max",
+                values: [2,5]
+            },
+            constraints:[
+                {
+                    values:[1,4],
+                    restriction:{
+                        type:"lessthan",
+                        value:24,
+                    }
+                },
+                {
+                    values:[-1,-1],
+                    restriction:{
+                        type:"greaterthan",
+                        value:-6,
+                    }
+                },
+            ]
+        }
+    },
+    {
+        title: "Thesis Beispiel: Mehrdeutigkeit",
+        problem: {
+            fRow:{
+                F: 0,
+                values: []
+            },
+            function:{
+                type: "max",
+                values: [2,5]
+            },
+            constraints:[
+                {
+                    values:[1,4],
+                    restriction:{
+                        type:"lessthan",
+                        value:24,
+                    }
+                },
+                {
+                    values:[-1,-1],
+                    restriction:{
+                        type:"greaterthan",
+                        value:-12,
+                    }
+                },
+                {
+                    values:[1,2.5],
+                    restriction:{
+                        type:"lessthan",
+                        value:15,
+                    }
+                },
+            ]
+        }
+    },
+    {
+        title: "Thesis Beispiel: Unbeschränktheit",
+        problem: {
+            fRow:{
+                F: 0,
+                values: []
+            },
+            function:{
+                type: "max",
+                values: [2,5]
+            },
+            constraints:[
+                {
+                    values:[0,4],
+                    restriction:{
+                        type:"lessthan",
+                        value:20,
+                    }
+                },
+                {
+                    values:[-1,1],
+                    restriction:{
+                        type:"lessthan",
+                        value:10,
+                    }
+                },
+            ]
+        }
     }
 ]
