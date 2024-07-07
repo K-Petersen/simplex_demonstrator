@@ -294,5 +294,41 @@ export const problems = [
                 },
             ]
         }
-    }
+    },
+    {
+        title: "Thesis Beispiel: M-Methode",
+        problem: {
+            fRow:{
+                F: 0,
+                values: []
+            },
+            function:{
+                type: "max",
+                values: [2,5]
+            },
+            constraints:[
+                {
+                    values:[1,4],
+                    restriction:{
+                        type:"lessthan",
+                        value:24,
+                    }
+                },
+                {
+                    values:[-1,-1],
+                    restriction:{
+                        type:"greaterthan",
+                        value:-12,
+                    }
+                },
+                {
+                    values:[1,2],
+                    restriction:{
+                        type:"greaterthan",
+                        value:2,
+                    }
+                },
+            ]
+        }
+    },
 ]
