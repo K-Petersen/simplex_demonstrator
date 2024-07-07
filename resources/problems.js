@@ -322,10 +322,10 @@ export const problems = [
                     }
                 },
                 {
-                    values:[1,2],
+                    values:[2,1],
                     restriction:{
                         type:"greaterthan",
-                        value:2,
+                        value:8,
                     }
                 },
             ]
