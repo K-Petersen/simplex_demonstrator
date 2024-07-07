@@ -5,13 +5,17 @@ export function solve(simplextable){
     let iteration = 0;
     initializeIterationObject(iteration)
     simplexIterations[iteration].newTable = simplextable;
-    
     while(checkOptimizationPotential(simplexIterations[iteration].newTable)){
         initializeIterationObject(iteration + 1);
         iterate(simplexIterations[iteration].newTable, iteration);
+        //special case unrestricted solution
+        if(simplexIterations[iteration].pivot.row === undefined) {
+            simplexIterations.pop()
+            iterate(simplexIterations[iteration].newTable, iteration);
+            break;
+        }
         iteration += 1;
     }
-    
     return simplexIterations;
 }
 
@@ -40,6 +44,8 @@ function iterate(table, iteration){
     const pivotcol = returnPivotColId(isM ? table.mRow.values : table.fRow.values);
     simplexIterations[i].pivot.col = pivotcol;
     simplexIterations[i].biaijs = calculateBiaijs(table, i);
+    //special case unrestricted solution (only if-line)
+    if(simplexIterations[i].biaijs.filter(x => x !== Infinity).length === 0) return;
     const pivotrow = returnPivotRowId(simplexIterations[i].biaijs);
     simplexIterations[i].pivot.row = pivotrow;
     simplexIterations[i + 1].newTable.constraints[simplexIterations[i].pivot.row] = calculateNewPivotRow(table.constraints[pivotrow], i);

@@ -221,13 +221,15 @@ export function animateForward(i, s){
     if(isM){
         yCol = mainTable.querySelectorAll(".col_" + variableIndexPairing[simplexIterations[iteration].newTable.constraints[pivotrowid].variable]);
     }
+    const isUnrestrictedSolution = pivotrowid === undefined;
+
     switch (step){
         case 0:
             renderTable(simplexIterations[iteration], mainTable);
             setHTML("Überprüfe zunächst das Optimierungspotenzial.");
             break;
         case 1:
-            if(iteration < simplexIterations.length - 1){
+            if(iteration < simplexIterations.length - 1 || isUnrestrictedSolution){
                 setHTML("Wenn noch negative Werte in der " + (isM ? "M" : "F") + "-Zeile sind, ist die optimale Basislösung noch nicht gefunden.");
                 toggleHighlightRow(true, false, (isM ? HTMLSelectors.mRow : HTMLSelectors.fRow));
             }else{
@@ -279,7 +281,9 @@ export function animateForward(i, s){
             }
             break;
         case 3:
-            setHTML("Das ist deine Pivotspalte.");
+            let html = "Das ist deine Pivotspalte.";
+            if(isUnrestrictedSolution) html += "</br> Alle Werte in deiner Pivotspalte sind entweder 0 oder negativ. </br> Der Algorithmus terminiert hier, ohne eine optimale Lösung gefunden zu haben. Die Lösung ist unbeschränkt."
+            setHTML(html);
             togglePivot(true, "col");
             break;
         case 4:

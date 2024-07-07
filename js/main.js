@@ -80,18 +80,21 @@ function handleChangeDropdown(e){
 function handleAnimation(direction){
     const STEP_MAX = 15;
     if(direction === 1){
-        if(iteration < simplexIterations.length - 1 || step < 1){
+        if(simplexIterations[iteration].pivot.row === undefined && simplexIterations[iteration].pivot.col !== undefined){
+            //special case for unrestricted solution
+            if(step < 3) step ++;
+        } else if(iteration < simplexIterations.length - 1 || step < 1){
             if(step === STEP_MAX && iteration < simplexIterations.length){
                 step = 0;
                 iteration++;
             }else{
-                    step++;
-                    if(step === 11 && !("mRow" in simplexIterations[iteration].newTable)){
-                        step += 2;
-                    }
+                step++;
+                if(step === 11 && !("mRow" in simplexIterations[iteration].newTable)){
+                    step += 2;
                 }
-            animateForward(iteration, step);
+            }
         }
+        animateForward(iteration, step);
         
     }else{
         if(step === 0){
