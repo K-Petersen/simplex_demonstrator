@@ -101,12 +101,12 @@ function createRow(values, biValue, biaijValue, rowId, index = -1){
 
     for(let x = 0; x < values.length; x++){
         const cell = document.createElement("div");
-        cell.innerText = roundToTwoDigits(values[x])
+        cell.innerText = roundToTwoDigits(values[x]) + (rowId === "M" ? "M" : "")
         cell.classList.add(rowClass, "col_" + x, "col_var");
         row.appendChild(cell)
     }
     const bi = document.createElement("div");
-    bi.innerText = biValue;
+    bi.innerText = biValue  + (rowId === "M" ? "M" : "");
     bi.classList.add(rowClass, "col_bi");
     row.appendChild(bi);
 
