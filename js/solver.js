@@ -46,24 +46,24 @@ function iterate(table, iteration){
     simplexIterations[i].biaijs = calculateBiaijs(table, i);
     //special case unrestricted solution (only if-line)
     if(simplexIterations[i].biaijs.filter(x => x !== Infinity).length === 0) return;
-    const pivotrow = returnPivotRowId(simplexIterations[i].biaijs);
-    simplexIterations[i].pivot.row = pivotrow;
-    simplexIterations[i + 1].newTable.constraints[simplexIterations[i].pivot.row] = calculateNewPivotRow(table.constraints[pivotrow], i);
+    const pivotrowid = returnPivotRowId(simplexIterations[i].biaijs);
+    simplexIterations[i].pivot.row = pivotrowid;
+    simplexIterations[i + 1].newTable.constraints[pivotrowid] = calculateNewPivotRow(table.constraints[pivotrowid], i);
+
     
-    const newTable = calculateNewTable(table, i);
-    
+    const newTable = calculateNewTable(table, i);    
     
     for(var x = 0; x < newTable.constraints.length; x++){
         if(Object.keys(newTable.constraints[x]).length > 0){
             if(isM){
-                const yId = variableIndexPairing[simplexIterations[i].newTable.constraints[pivotcol].variable]
+                const yId = variableIndexPairing[simplexIterations[i].newTable.constraints[simplexIterations[i].pivot.row].variable]
                 newTable.constraints[x].values.splice(yId,1);
             }
             simplexIterations[i + 1].newTable.constraints[x] = newTable.constraints[x];
         }
     }
     if(isM){
-        const yId = variableIndexPairing[simplexIterations[i].newTable.constraints[pivotcol].variable]
+        const yId = variableIndexPairing[simplexIterations[i].newTable.constraints[simplexIterations[i].pivot.row].variable]
         newTable.mRow.values.splice(yId,1);
         newTable.fRow.values.splice(yId,1);
         simplexIterations[i + 1].newTable.constraints[simplexIterations[i].pivot.row].values.splice(yId, 1);
@@ -150,6 +150,7 @@ function calculateNewTable(table, iteration){
         newConstraints.push(newConstraint);
     }
     const newFRow = calculateNewRow(table.fRow.values, iteration);
+
     const newF = table.fRow.F + (pivotrow.restriction * -1 * table.fRow.values[pivotcolid])
     const newTable = {
         fRow: {
@@ -178,8 +179,7 @@ function calculateNewRow(row, iteration){
     for(var x = 0; x < row.length; x++){
         const newValue = (pivotrow.values[x] * -1 * row[pivotcolid]) + row[x];
         newRow.push(newValue);
-    }
-    
+    }    
     return newRow;
 }
 
