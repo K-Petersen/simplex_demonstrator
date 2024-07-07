@@ -165,7 +165,7 @@ export function renderProblem(node, problemID, transformed){
         let val = values[x];
         if( Math.abs(values[x]) === 1 ){
             val = "";
-        }else if(x > 0){
+        }else {
             val = Math.abs(values[x])
         }
 
@@ -245,15 +245,15 @@ export function renderProblem(node, problemID, transformed){
             }else{
                 valuesGreaterThanZero++;
             }
-            const sign = (valuesGreaterThanZero > 1 && y > 0 ? (values[y] === Math.abs(values[y]) ? "+" : "&minus;") : "");
+            const sign = values[y] < 0 ? "&minus;" : (valuesGreaterThanZero > 1 && y > 0 ? (values[y] === Math.abs(values[y]) ? "+" : "&minus;") : "");
             let val = values[y];
             if( Math.abs(values[y]) === 1 ){
                 val = "";
-            }else if(x > 0){
+            }else{
                 val = Math.abs(values[y])
             }
 
-            if (y > 0) constraintInnerHTML += "<span class='sign'>" + sign +"</span>";
+            if (y > 0 || values[y] < 0) constraintInnerHTML += "<span class='sign'>" + sign +"</span>";
             constraintInnerHTML += "<span class='variable'>" + val + ( !(yCount > 0 && y + 1 > (func.values.length - yCount)) ? "x" + "<sub>" + (y + 1) + "</sub>": "y" + "<sub>" + (y + 1 - (func.values.length - yCount)) + "</sub>") + "</span>";
         }
         const sign = (constraint.restriction.type === "lessthan" ? "&le;" : (constraint.restriction.type === "greaterthan" ? "&ge;" : "="))
