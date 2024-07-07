@@ -195,6 +195,7 @@ export function animateBackward(i, s){
                 [...row.children].forEach(node => node.classList.add("transformation_undone"))
             });
             toggleHighlightCol(true, false, mainTable.querySelectorAll(".col_" + pivotcolid));
+            swapBase();
 
             break;
         case 15:
