@@ -35,7 +35,7 @@ export function renderSimplexTable(simplexIterationObject){
         }else{
             biaijVal = "";
         }
-        rows.push(createRow(constraint.values, roundToTwoDigits(constraint.restriction), roundToTwoDigits(biaijVal), constraint.variable, x));
+        rows.push(createRow(constraint.values, roundToTwoDigits(constraint.restriction), biaijVal, constraint.variable, x));
     }
     rows.push(createRow(table.fRow.values, table.fRow.F, "", "F"))
     if("mRow" in table){
