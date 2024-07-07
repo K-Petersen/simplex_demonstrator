@@ -37,9 +37,9 @@ export function renderSimplexTable(simplexIterationObject){
         }
         rows.push(createRow(constraint.values, roundToTwoDigits(constraint.restriction), biaijVal, constraint.variable, x));
     }
-    rows.push(createRow(table.fRow.values, table.fRow.F, "", "F"))
+    rows.push(createRow(table.fRow.values, roundToTwoDigits(table.fRow.F), "", "F"))
     if("mRow" in table){
-        rows.push(createRow(table.mRow.values, table.mRow.M, "", "M"))
+        rows.push(createRow(table.mRow.values, roundToTwoDigits(table.mRow.M), "", "M"))
     } 
     
     return rows;
