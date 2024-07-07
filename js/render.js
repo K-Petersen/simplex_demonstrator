@@ -86,7 +86,6 @@ function createRow(values, biValue, biaijValue, rowId, index = -1){
     const row = document.createElement("div");
     const rowClass = "row_" + (index === -1 ? rowId : index);
     row.id = rowClass;
-    row.dataset.variable = rowId;
     row.classList.add("row");
     
     const bv = document.createElement("div");
