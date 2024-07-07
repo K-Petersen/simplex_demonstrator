@@ -222,7 +222,7 @@ export function animateForward(i, s){
     if(isM){
         yCol = mainTable.querySelectorAll(".col_" + variableIndexPairing[simplexIterations[iteration].newTable.constraints[pivotrowid].variable]);
     }
-    const isUnrestrictedSolution = pivotrowid === undefined;
+    const isUnrestrictedSolution = (pivotrowid === undefined && pivotcolid !== undefined);
 
     switch (step){
         case 0:
